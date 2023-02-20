@@ -7,12 +7,22 @@ const CARDS_COUNT = 5;
 
 
 export default class BoardPresenter {
-  constructor({boardContainer}) {
-    this.boardContainer = boardContainer;
+  #boardContainer = null;
+  #moviesModel = null;
+
+  #movies = [];
+
+  #listComponent = new FilmsListContainerView();
+
+  constructor({boardContainer, moviesModel}) {
+    this.#boardContainer = boardContainer;
+    this.#moviesModel = moviesModel;
   }
 
   init() {
-    render(new FilmsListContainerView(), this.boardContainer);
+    this.#movies = [...this.#moviesModel.movies];
+
+    render(this.#listComponent, this.#boardContainer);
 
     const filmsListContainerElement = document.querySelector('.films-list__container');
 

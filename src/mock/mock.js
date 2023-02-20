@@ -1,9 +1,9 @@
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
+import { getRandomArrayElement } from '../utils.js';
 
-const PICTURES = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each-other.png',
+const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png', 'images/posters/the-dance-of-life.jpg'];
+
+const getRandomPoster = getRandomArrayElement(POSTERS);
 
 const mockComments = [
   {
@@ -46,7 +46,7 @@ const mockMovies = [
       'title': 'A Little Pony Without The Carpet',
       'alternative_title': 'Laziness Who Sold Themselves',
       'total_rating': 5.3,
-      'poster': getRandomArrayElement(PICTURES),
+      'poster': getRandomPoster,
       'age_rating': 0,
       'director': 'Tom Ford',
       'writers': [
@@ -81,7 +81,7 @@ const mockMovies = [
       'title': 'M3GAN',
       'alternative_title': 'M3GAN',
       'total_rating': 3.3,
-      'poster': getRandomArrayElement(PICTURES),
+      'poster': getRandomPoster,
       'age_rating': 18,
       'director': 'Gerard Johnstone',
       'writers': [
@@ -116,7 +116,7 @@ const mockMovies = [
       'title': 'The Menu',
       'alternative_title': 'The Menu',
       'total_rating': 5,
-      'poster': getRandomArrayElement(PICTURES),
+      'poster': getRandomPoster,
       'age_rating': 18,
       'director': ' Mark Mylod',
       'writers': [
@@ -143,3 +143,7 @@ const mockMovies = [
     }
   }
 ];
+
+const getRandomMovie = () => getRandomArrayElement(mockMovies);
+
+export { getRandomMovie, mockComments };
