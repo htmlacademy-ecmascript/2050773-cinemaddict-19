@@ -5,42 +5,12 @@ const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each
 
 // const getRandomPoster = getRandomArrayElement(POSTERS);
 
-const mockComments = [
-  {
-    'id': '1',
-    'author': 'Ilya O\'Reilly',
-    'comment': 'a film that changed my life, a true masterpiece, post-credit scene was just amazing omg.',
-    'date': '2022-05-11T16:12:32.554Z',
-    'emotion': 'smile'
-  },
-  {
-    'id': '2',
-    'author': 'Nastya Chasovskikh',
-    'comment': 'the film is piece of shit',
-    'date': '2023-01-11T16:12:32.554Z',
-    'emotion': 'puke'
-  },
-  {
-    'id': '3',
-    'author': 'Ilya Matveev',
-    'comment': 'lives up to the hype',
-    'date': '2023-05-05T16:12:32.554Z',
-    'emotion': 'sleeping'
-  },
-  {
-    'id': '4',
-    'author': 'Guess Who',
-    'comment': 'I will find and kill you.',
-    'date': '2023-11-11T16:12:32.554Z',
-    'emotion': 'angry'
-  }
-];
 
 const mockMovies = [
   {
     'id': '0',
     'comments': [
-      1, 2
+      '1', '2'
     ],
     'film_info': {
       'title': 'A Little Pony Without The Carpet',
@@ -75,7 +45,7 @@ const mockMovies = [
   {
     'id': '1',
     'comments': [
-      3, 4
+      '3', '4'
     ],
     'film_info': {
       'title': 'M3GAN',
@@ -110,7 +80,7 @@ const mockMovies = [
   {
     'id': '2',
     'comments': [
-      2, 3
+      '2', '3'
     ],
     'film_info': {
       'title': 'The Menu',
@@ -146,4 +116,4 @@ const mockMovies = [
 
 const getRandomMovie = () => getRandomArrayElement(mockMovies);
 
-export { getRandomMovie, mockComments };
+export { getRandomMovie };

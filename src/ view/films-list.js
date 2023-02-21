@@ -7,9 +7,16 @@ const createFilmsListTemplate = (isExtra, title) =>
 
 export default class FilmsListView {
   #element = null;
+  #isExtra = null;
+  #title = null;
+
+  constructor(isExtra, title) {
+    this.#isExtra = isExtra;
+    this.#title = title;
+  }
 
   get template() {
-    return createFilmsListTemplate();
+    return createFilmsListTemplate(this.#isExtra, this.#title);
   }
 
   get element() {

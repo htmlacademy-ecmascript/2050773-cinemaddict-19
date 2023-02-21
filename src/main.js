@@ -4,16 +4,21 @@ import FilterView from './ view/filter.js';
 import SortView from './ view/sort.js';
 import ProfileView from './ view/profile.js';
 // import PopupView from './ view/popup.js';
+import StatisticsView from './ view/statistics.js';
 import {RenderPosition, render} from './render.js';
 import MoviesModel from './model/movies-model.js';
 
+const mockMoviesData = 666;
+
 const mainElement = document.querySelector('.main');
 const headerElement = document.querySelector('.header');
+const footerElement = document.querySelector('footer');
 
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
 render(new FilterView(), mainElement);
 render(new SortView(), mainElement);
 render(new BoardView(), mainElement);
+render(new StatisticsView(mockMoviesData), footerElement, RenderPosition.BEFOREEND);
 
 const filmsListElement = document.querySelector('.films');
 
