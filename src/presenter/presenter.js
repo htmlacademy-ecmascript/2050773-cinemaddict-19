@@ -27,7 +27,7 @@ export default class BoardPresenter {
     const filmsListContainerElement = document.querySelector('.films-list__container');
 
     for (let i = 0; i < CARDS_COUNT; i++) {
-      render(new FilmCardView, filmsListContainerElement);
+      render(new FilmCardView(this.#movies[i]), filmsListContainerElement);
     }
   }
 }

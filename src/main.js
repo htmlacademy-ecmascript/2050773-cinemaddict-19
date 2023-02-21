@@ -3,6 +3,7 @@ import FilterView from './ view/filter.js';
 import SortView from './ view/sort.js';
 import ProfileView from './ view/profile.js';
 import FilmsListView from './ view/films-list.js';
+import PopupView from './ view/popup.js';
 import {RenderPosition, render} from './render.js';
 import MoviesModel from './model/movies-model.js';
 
@@ -23,5 +24,10 @@ const boardPresenter = new BoardPresenter({
   boardContainer: filmsListElement,
   moviesModel
 });
+
+const bodyElement = document.querySelector('body');
+
+render(new PopupView(), bodyElement, RenderPosition.BEFOREEND);
+
 
 boardPresenter.init();
