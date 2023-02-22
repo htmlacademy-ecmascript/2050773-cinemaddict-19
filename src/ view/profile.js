@@ -24,4 +24,3 @@ export default class ProfileView {
     this.#element = null;
   }
 }
-

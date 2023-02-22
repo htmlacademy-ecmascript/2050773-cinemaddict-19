@@ -10,21 +10,21 @@ const isExtra = true;
 
 export default class BoardPresenter {
   #boardContainer = null;
-  #moviesModel = null;
+  #filmsModel = null;
 
 
-  #movies = [];
+  #films = [];
 
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
 
-  constructor({boardContainer, moviesModel}) {
+  constructor({boardContainer, filmsModel}) {
     this.#boardContainer = boardContainer;
-    this.#moviesModel = moviesModel;
+    this.#filmsModel = filmsModel;
   }
 
   init() {
-    this.#movies = [...this.#moviesModel.movies];
+    this.#films = [...this.#filmsModel.films];
 
     render(this.#listComponent, this.#boardContainer);
 
@@ -35,7 +35,7 @@ export default class BoardPresenter {
     const filmsListContainerElement = document.querySelector('.films-list__container');
 
     for (let i = 0; i < allCardsCount; i++) {
-      render(new FilmCardView(this.#movies[i]), filmsListContainerElement);
+      render(new FilmCardView(this.#films[i]), filmsListContainerElement);
     }
 
     render (new ShowMoreButtonView(), this.#listComponent.element);
@@ -47,12 +47,10 @@ export default class BoardPresenter {
 
     // const newFilmsListContainerElement = document.querySelector('.films-list__container');
 
-
     // for (let i = 0; i < extraCardsCount; i++) {
-    //   render(new FilmCardView(this.#movies[i]), newFilmsListContainerElement);
+    //   render(new FilmCardView(this.#films[i]), newFilmsListContainerElement);
     // }
 
     render(new FilmsListView(isExtra, 'Most commented'), this.#boardContainer, RenderPosition.BEFOREEND);
-
   }
 }

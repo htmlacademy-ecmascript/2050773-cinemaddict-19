@@ -1,19 +1,19 @@
 import { createElement } from '../render.js';
 
-const createFilmCardTemplate = (movie) => {
-  const {film_info} = movie;
+const createFilmCardTemplate = (film) => {
+  const {filmInfo} = film;
 
   return `<article class="film-card">
     <a class="film-card__link">
-      <h3 class="film-card__title">${film_info.title}</h3>
-      <p class="film-card__rating">${film_info.total_rating}</p>
+      <h3 class="film-card__title">${filmInfo.title}</h3>
+      <p class="film-card__rating">${filmInfo.totalRating}</p>
       <p class="film-card__info">
         <span class="film-card__year">1933</span>
-        <span class="film-card__duration">${film_info.duration}m</span>
-        <span class="film-card__genre">${film_info.genre}</span>
+        <span class="film-card__duration">${filmInfo.duration}m</span>
+        <span class="film-card__genre">${filmInfo.genre}</span>
       </p>
-      <img src="${film_info.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${film_info.description}</span>
+      <img src="${filmInfo.poster}" alt="" class="film-card__poster">
+      <p class="film-card__description">${filmInfo.description}</span>
     </a>
     <div class="film-card__controls">
       <button class="film-card__controls-item film-card__controls-item--add-to-watchlist film-card__controls-item--active" type="button">Add to watchlist</button>
@@ -24,15 +24,15 @@ const createFilmCardTemplate = (movie) => {
 };
 
 export default class FilmCardView {
-  #movie = null;
+  #film = null;
   #element = null;
 
   constructor(movie) {
-    this.#movie = movie;
+    this.#film = movie;
   }
 
   get template() {
-    return createFilmCardTemplate(this.#movie);
+    return createFilmCardTemplate(this.#film);
   }
 
   get element() {
@@ -46,4 +46,3 @@ export default class FilmCardView {
     this.#element = null;
   }
 }
-

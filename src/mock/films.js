@@ -3,21 +3,18 @@ import { getRandomArrayElement } from '../utils.js';
 const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png', 'images/posters/the-dance-of-life.jpg'];
 
-// const getRandomPoster = getRandomArrayElement(POSTERS);
-
-
-const mockMovies = [
+const mockFilms = [
   {
     'id': '0',
     'comments': [
       '1', '2'
     ],
-    'film_info': {
+    'filmInfo': {
       'title': 'A Little Pony Without The Carpet',
-      'alternative_title': 'Laziness Who Sold Themselves',
-      'total_rating': 5.3,
+      'alternativeTitle': 'Laziness Who Sold Themselves',
+      'totalRating': 5.3,
       'poster': POSTERS[3],
-      'age_rating': 0,
+      'ageRating': 0,
       'director': 'Tom Ford',
       'writers': [
         'Takeshi Kitano'
@@ -27,7 +24,7 @@ const mockMovies = [
       ],
       'release': {
         'date': '2019-05-11T00:00:00.000Z',
-        'release_country': 'Finland'
+        'releaseCountry': 'Finland'
       },
       'duration': 77,
       'genre': [
@@ -35,10 +32,10 @@ const mockMovies = [
       ],
       'description': 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
     },
-    'user_details': {
+    'userDetails': {
       'watchlist': false,
-      'already_watched': true,
-      'watching_date': '2019-04-12T16:12:32.554Z',
+      'alreadyWatched': true,
+      'watchingDate': '2019-04-12T16:12:32.554Z',
       'favorite': false
     }
   },
@@ -47,12 +44,12 @@ const mockMovies = [
     'comments': [
       '3', '4'
     ],
-    'film_info': {
+    'filmInfo': {
       'title': 'M3GAN',
-      'alternative_title': 'M3GAN',
-      'total_rating': 3.3,
+      'alternativeTitle': 'M3GAN',
+      'totalRating': 3.3,
       'poster': POSTERS[1],
-      'age_rating': 18,
+      'ageRating': 18,
       'director': 'Gerard Johnstone',
       'writers': [
         'Ben Milsom'
@@ -62,7 +59,7 @@ const mockMovies = [
       ],
       'release': {
         'date': '2023-05-11T00:00:00.000Z',
-        'release_country': 'USA'
+        'releaseCountry': 'USA'
       },
       'duration': 177,
       'genre': [
@@ -70,10 +67,10 @@ const mockMovies = [
       ],
       'description': 'M3GAN is a marvel of artificial intelligence, a lifelike doll that\'s programmed to be a child\'s greatest companion and a parent\'s greatest ally.'
     },
-    'user_details': {
+    'userDetails': {
       'watchlist': false,
-      'already_watched': true,
-      'watching_date': '2023-04-12T16:12:32.554Z',
+      'alreadyWatched': true,
+      'watchingDate': '2023-04-12T16:12:32.554Z',
       'favorite': false
     }
   },
@@ -82,12 +79,12 @@ const mockMovies = [
     'comments': [
       '2', '3'
     ],
-    'film_info': {
+    'filmInfo': {
       'title': 'The Menu',
-      'alternative_title': 'The Menu',
-      'total_rating': 5,
+      'alternativeTitle': 'The Menu',
+      'totalRating': 5,
       'poster': POSTERS[2],
-      'age_rating': 18,
+      'ageRating': 18,
       'director': ' Mark Mylod',
       'writers': [
         'Lindsey Moran'
@@ -97,7 +94,7 @@ const mockMovies = [
       ],
       'release': {
         'date': '2022-01-11T00:00:00.000Z',
-        'release_country': 'UK'
+        'releaseCountry': 'UK'
       },
       'duration': 107,
       'genre': [
@@ -105,15 +102,15 @@ const mockMovies = [
       ],
       'description': 'The Menu ist eine US-amerikanische schwarzhumorige Satire mit Horrorelementen von Regisseur Mark Mylod, in der das Thema Haute Cuisine in den Mittelpunkt'
     },
-    'user_details': {
+    'userDetails': {
       'watchlist': true,
-      'already_watched': true,
-      'watching_date': '2023-12-12T16:12:32.554Z',
+      'alreadyWatched': true,
+      'watchingDate': '2023-12-12T16:12:32.554Z',
       'favorite': false
     }
   }
 ];
 
-const getRandomMovie = () => getRandomArrayElement(mockMovies);
+const getRandomFilm = () => getRandomArrayElement(mockFilms);
 
-export { getRandomMovie };
+export { getRandomFilm };

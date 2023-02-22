@@ -131,5 +131,3 @@ export default class PopupView {
     this.#element = null;
   }
 }
-
-

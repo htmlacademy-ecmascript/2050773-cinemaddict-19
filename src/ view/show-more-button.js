@@ -21,4 +21,3 @@ export default class ShowMoreButtonView {
     this.#element = null;
   }
 }
-
