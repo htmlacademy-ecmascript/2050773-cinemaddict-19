@@ -5,14 +5,15 @@ import FilmsListContainerView from '../ view/films-list-container';
 import FilmCardView from '../ view/film-card.js';
 import ShowMoreButtonView from '../ view/show-more-button.js';
 
-const allCardsCount = 5;
+const FILM_COUNT_PER_STEP = 5;
 const isExtra = true;
 
 export default class BoardPresenter {
   #boardContainer = null;
   #popupContainer = null;
   #filmsModel = null;
-
+  #renderedFilmCount = FILM_COUNT_PER_STEP;
+  #showMoreButtonComponent = null;
 
   #films = [];
 
@@ -34,25 +35,43 @@ export default class BoardPresenter {
 
     render(this.#listContainerComponent, filmsListElement);
 
-    for (let i = 0; i < allCardsCount; i++) {
+    for (let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
       this.#renderFilmCard(this.#films[i]);
     }
 
-    render (new ShowMoreButtonView(), this.#listComponent.element);
+    if (this.#films.length > FILM_COUNT_PER_STEP) {
+
+      this.#showMoreButtonComponent = new ShowMoreButtonView();
+      render(this.#showMoreButtonComponent, this.#listComponent.element);
+
+      this.#showMoreButtonComponent.element.addEventListener('click', this.#showMoreButtonClickHandler);
+    }
 
     render(new FilmsListView(isExtra, 'Top rated'), this.#boardContainer, RenderPosition.BEFOREEND);
-
     render(new FilmsListView(isExtra, 'Most commented'), this.#boardContainer, RenderPosition.BEFOREEND);
   }
+
+  #showMoreButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#films
+      .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP)
+      .forEach((film) => this.#renderFilmCard(film));
+
+    this.#renderedFilmCount += FILM_COUNT_PER_STEP;
+
+    if (this.#renderedFilmCount >= this.#films.length) {
+      this.#showMoreButtonComponent.element.remove();
+      this.#showMoreButtonComponent.removeElement();
+
+    }
+  };
 
   #renderFilmCard(film) {
     const filmComponent = new FilmCardView(film);
     const popupComponent = new PopupView(film);
     const filmsListContainerElement = document.querySelector('.films-list__container');
 
-
     const replaceCardtoPopup = () => this.#popupContainer.appendChild(popupComponent.element);
-
     const replacePopuptoCard = () => popupComponent.element.remove();
 
     const escKeyDownHandler = (evt) => {
