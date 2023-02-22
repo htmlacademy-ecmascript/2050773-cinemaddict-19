@@ -10,6 +10,5 @@ export default class PopupPresenter {
 
   init() {
     render(new PopupView, this.#popupContainer);
-
   }
 }

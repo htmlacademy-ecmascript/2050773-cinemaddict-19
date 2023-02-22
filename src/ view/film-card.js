@@ -27,8 +27,8 @@ export default class FilmCardView {
   #film = null;
   #element = null;
 
-  constructor(movie) {
-    this.#film = movie;
+  constructor(film) {
+    this.#film = film;
   }
 
   get template() {

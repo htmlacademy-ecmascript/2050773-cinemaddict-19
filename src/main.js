@@ -1,5 +1,4 @@
 import BoardPresenter from './presenter/presenter.js';
-import PopupPresenter from './presenter/popup-presenter.js';
 import BoardView from './ view/board.js';
 import FilterView from './ view/filter.js';
 import SortView from './ view/sort.js';
@@ -11,8 +10,8 @@ import FilmsModel from './model/films-model.js';
 const mockFilmsData = 666;
 
 const mainElement = document.querySelector('.main');
-const headerElement = document.querySelector('.header');
 const bodyElement = document.querySelector('body');
+const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('footer');
 
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
@@ -27,12 +26,14 @@ const filmsModel = new FilmsModel();
 
 const boardPresenter = new BoardPresenter({
   boardContainer: filmsListElement,
+  popupContainer: bodyElement,
   filmsModel
 });
 
-const popupPresenter = new PopupPresenter({
-  popupContainer: bodyElement
-});
+
+// const popupPresenter = new PopupPresenter({
+//   popupContainer: bodyElement
+// });
 
 // render(new PopupView(), bodyElement, RenderPosition.BEFOREEND);
 
