@@ -1,8 +1,12 @@
 import { RenderPosition, render } from '../render.js';
+import BoardView from '../ view/board.js';
+import FilterView from '../ view/filter.js';
 import PopupView from '../ view/popup.js';
+import SortView from '../ view/sort.js';
 import FilmsListView from '../ view/films-list.js';
 import FilmsListContainerView from '../ view/films-list-container';
 import FilmCardView from '../ view/film-card.js';
+import NoFilmView from '../ view/no-film.js';
 import ShowMoreButtonView from '../ view/show-more-button.js';
 
 const FILM_COUNT_PER_STEP = 5;
@@ -12,6 +16,9 @@ export default class BoardPresenter {
   #boardContainer = null;
   #popupContainer = null;
   #filmsModel = null;
+
+  #boardComponent = new BoardView();
+
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #showMoreButtonComponent = null;
 
@@ -29,26 +36,29 @@ export default class BoardPresenter {
   init() {
     this.#films = [...this.#filmsModel.films];
 
-    render(this.#listComponent, this.#boardContainer);
+    render(this.#boardComponent, this.#boardContainer);
+    render(new FilterView(), this.#boardContainer, RenderPosition.AFTERBEGIN);
 
-    const filmsListElement = document.querySelector('.films-list');
 
-    render(this.#listContainerComponent, filmsListElement);
+    if (this.#films.every((film) => film.isArchive)) {
+      render(new NoFilmView(), this.#boardComponent.element);
+    } else {
+      render(new SortView(), this.#boardContainer, RenderPosition.AFTERBEGIN);
+      render(this.#listComponent, this.#boardComponent.element);
+      render(this.#listContainerComponent, this.#boardComponent.element);
+      render(new FilmsListView(isExtra, 'Top rated'), this.#boardContainer, RenderPosition.BEFOREEND);
+      render(new FilmsListView(isExtra, 'Most commented'), this.#boardContainer, RenderPosition.BEFOREEND);
+    }
 
     for (let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
       this.#renderFilmCard(this.#films[i]);
     }
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
-
       this.#showMoreButtonComponent = new ShowMoreButtonView();
-      render(this.#showMoreButtonComponent, this.#listComponent.element);
-
+      render(this.#showMoreButtonComponent, this.#boardComponent.element);
       this.#showMoreButtonComponent.element.addEventListener('click', this.#showMoreButtonClickHandler);
     }
-
-    render(new FilmsListView(isExtra, 'Top rated'), this.#boardContainer, RenderPosition.BEFOREEND);
-    render(new FilmsListView(isExtra, 'Most commented'), this.#boardContainer, RenderPosition.BEFOREEND);
   }
 
   #showMoreButtonClickHandler = (evt) => {

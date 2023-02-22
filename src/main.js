@@ -1,7 +1,4 @@
 import BoardPresenter from './presenter/presenter.js';
-import BoardView from './ view/board.js';
-import FilterView from './ view/filter.js';
-import SortView from './ view/sort.js';
 import ProfileView from './ view/profile.js';
 import StatisticsView from './ view/statistics.js';
 import { RenderPosition, render } from './render.js';
@@ -15,17 +12,14 @@ const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('footer');
 
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
-render(new FilterView(), mainElement);
-render(new SortView(), mainElement);
-render(new BoardView(), mainElement);
 render(new StatisticsView(mockFilmsData), footerElement, RenderPosition.BEFOREEND);
 
-const filmsListElement = document.querySelector('.films');
+// const filmsListElement = document.querySelector('.films');
 
 const filmsModel = new FilmsModel();
 
 const boardPresenter = new BoardPresenter({
-  boardContainer: filmsListElement,
+  boardContainer: mainElement,
   popupContainer: bodyElement,
   filmsModel
 });
