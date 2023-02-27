@@ -7,7 +7,7 @@ const mockFilms = [
   {
     'id': '0',
     'comments': [
-      '1', '2'
+      '14567', '178967'
     ],
     'filmInfo': {
       'title': 'A Little Pony Without The Carpet',
@@ -42,7 +42,7 @@ const mockFilms = [
   {
     'id': '1',
     'comments': [
-      '3', '4'
+      '2567', '5673'
     ],
     'filmInfo': {
       'title': 'M3GAN',
@@ -77,7 +77,7 @@ const mockFilms = [
   {
     'id': '2',
     'comments': [
-      '2', '3'
+      '9876', '543123'
     ],
     'filmInfo': {
       'title': 'The Menu',

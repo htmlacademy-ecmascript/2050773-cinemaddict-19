@@ -1,20 +1,20 @@
 import { createElement } from '../render.js';
 
-const createBoardTemplate = (data) =>
+const createBoardTemplate = (filmsAmount) =>
   ` <section class="footer__statistics">
-      <p> ${ data } movies inside</p>
+      <p> ${ filmsAmount } movies inside</p>
     </section>`;
 
 export default class StatisticsView {
   #element = null;
-  #data = null;
+  #filmsAmount = null;
 
-  constructor(data) {
-    this.#data = data;
+  constructor(filmsAmount) {
+    this.#filmsAmount = filmsAmount;
   }
 
   get template() {
-    return createBoardTemplate(this.#data);
+    return createBoardTemplate(this.#filmsAmount);
   }
 
   get element() {
