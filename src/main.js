@@ -1,4 +1,4 @@
-import BoardPresenter from './presenter/presenter.js';
+import BoardPresenter from './presenter/board-presenter.js';
 import ProfileView from './ view/profile-view.js';
 import StatisticsView from './ view/statistics-view.js';
 import { RenderPosition, render } from './framework/render.js';

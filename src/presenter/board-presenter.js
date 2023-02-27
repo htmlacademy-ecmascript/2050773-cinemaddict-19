@@ -59,14 +59,14 @@ export default class BoardPresenter {
     }
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
-      this.#showMoreButtonComponent = new ShowMoreButtonView();
+      this.#showMoreButtonComponent = new ShowMoreButtonView({
+        onClick: this.#handleShowMoreButtonClick
+      });
       render(this.#showMoreButtonComponent, this.#boardComponent.element);
-      this.#showMoreButtonComponent.element.addEventListener('click', this.#showMoreButtonClickHandler);
     }
   }
 
-  #showMoreButtonClickHandler = (evt) => {
-    evt.preventDefault();
+  #handleShowMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP)
       .forEach((film) => this.#renderFilmCard(film));
@@ -81,30 +81,39 @@ export default class BoardPresenter {
   };
 
   #renderFilmCard(film) {
-    const filmComponent = new FilmCardView(film);
-    const popupComponent = new PopupView(film);
     const filmsListContainerElement = document.querySelector('.films-list__container');
-
-    const replaceCardtoPopup = () => this.#popupContainer.appendChild(popupComponent.element);
-    const replacePopuptoCard = () => popupComponent.element.remove();
 
     const escKeyDownHandler = (evt) => {
       if (evt.key === 'Escape' || evt.key === 'Esc') {
         evt.preventDefault();
-        replacePopuptoCard();
+        replacePopuptoCard.call(this);
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     };
 
-    filmComponent.element.querySelector('.film-card__link').addEventListener('click', () => {
-      replaceCardtoPopup();
-      document.addEventListener('keydown', escKeyDownHandler);
+    const filmComponent = new FilmCardView({
+      film,
+      onPopupClick: () => {
+        replaceCardtoPopup.call(this);
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
     });
 
-    popupComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
-      replacePopuptoCard();
-      document.removeEventListener('keydown', escKeyDownHandler);
+    const popupComponent = new PopupView({
+      film,
+      onPopupCloseButtonClick: () => {
+        replacePopuptoCard.call(this);
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
     });
+
+    function replaceCardtoPopup() {
+      this.#popupContainer.appendChild(popupComponent.element);
+    }
+
+    function replacePopuptoCard() {
+      popupComponent.element.remove();
+    }
 
     render(filmComponent, filmsListContainerElement);
   }
