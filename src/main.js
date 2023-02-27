@@ -1,7 +1,7 @@
 import BoardPresenter from './presenter/presenter.js';
 import ProfileView from './ view/profile-view.js';
 import StatisticsView from './ view/statistics-view.js';
-import { RenderPosition, render } from './render.js';
+import { RenderPosition, render } from './framework/render.js';
 import FilmsModel from './model/films-model.js';
 import CommentsModel from './model/comments-model.js';
 

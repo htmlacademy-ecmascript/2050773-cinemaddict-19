@@ -1,4 +1,4 @@
-import { RenderPosition, render } from '../render.js';
+import { RenderPosition, render } from '../framework/render.js';
 import BoardView from '../ view/board-view.js';
 import FilterView from '../ view/filter-view.js';
 import PopupView from '../ view/popup-view.js';
