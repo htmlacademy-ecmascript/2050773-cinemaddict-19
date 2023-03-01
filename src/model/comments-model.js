@@ -4,7 +4,7 @@ export default class CommentsModel {
   #comments = [];
 
   constructor() {
-    this.#comments = Object.entries(mockComments);
+    this.#comments = mockComments;
   }
 
   get comments() {

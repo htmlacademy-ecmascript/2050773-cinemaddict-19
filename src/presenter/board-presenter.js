@@ -37,7 +37,7 @@ export default class BoardPresenter {
 
   init() {
     this.#films = [...this.#filmsModel.films];
-    this.#comments = [...this.#commentsModel.comments];
+    this.#comments = this.#commentsModel.comments;
     const MIN_VALUE_FILM_COUNT = Math.min(this.#films.length, FILM_COUNT_PER_STEP);
 
     render(this.#boardComponent, this.#boardContainer);
@@ -100,7 +100,10 @@ export default class BoardPresenter {
     });
 
     const popupComponent = new PopupView({
-      film,
+      film: {
+        ...film,
+        comments: film.comments.map((commentId) => this.#comments[commentId])
+      },
       onPopupCloseButtonClick: () => {
         replacePopuptoCard.call(this);
         document.removeEventListener('keydown', escKeyDownHandler);

@@ -1,4 +1,5 @@
 import { getRandomArrayElement } from '../utils.js';
+import { mockComments } from './comments.js';
 
 const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png', 'images/posters/the-dance-of-life.jpg'];
@@ -7,7 +8,7 @@ const mockFilms = [
   {
     'id': '0',
     'comments': [
-      '14567', '178967'
+      mockComments['14567'].id, mockComments['178967'].id
     ],
     'filmInfo': {
       'title': 'A Little Pony Without The Carpet',
@@ -28,7 +29,7 @@ const mockFilms = [
       },
       'duration': 77,
       'genre': [
-        'Comedy'
+        'Comedy', 'Test'
       ],
       'description': 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.'
     },
@@ -42,7 +43,7 @@ const mockFilms = [
   {
     'id': '1',
     'comments': [
-      '2567', '5673'
+      mockComments['2567'].id, mockComments['5673'].id
     ],
     'filmInfo': {
       'title': 'M3GAN',
@@ -63,7 +64,7 @@ const mockFilms = [
       },
       'duration': 177,
       'genre': [
-        'Horror'
+        'Horror','Comedy', 'Test'
       ],
       'description': 'M3GAN is a marvel of artificial intelligence, a lifelike doll that\'s programmed to be a child\'s greatest companion and a parent\'s greatest ally.'
     },
@@ -77,7 +78,7 @@ const mockFilms = [
   {
     'id': '2',
     'comments': [
-      '9876', '543123'
+      mockComments['9876'].id, mockComments['543123'].id
     ],
     'filmInfo': {
       'title': 'The Menu',
@@ -98,7 +99,7 @@ const mockFilms = [
       },
       'duration': 107,
       'genre': [
-        'Comedy'
+        'Comedy', 'Horror','Comedy', 'Test'
       ],
       'description': 'The Menu ist eine US-amerikanische schwarzhumorige Satire mit Horrorelementen von Regisseur Mark Mylod, in der das Thema Haute Cuisine in den Mittelpunkt'
     },

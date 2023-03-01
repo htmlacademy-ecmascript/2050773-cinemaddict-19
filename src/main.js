@@ -15,10 +15,8 @@ const footerElement = document.querySelector('footer');
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
 render(new StatisticsView(MOCK_FILMS_AMOUNT), footerElement, RenderPosition.BEFOREEND);
 
-
 const filmsModel = new FilmsModel();
 const commentsModel = new CommentsModel();
-
 
 const boardPresenter = new BoardPresenter({
   boardContainer: mainElement,
