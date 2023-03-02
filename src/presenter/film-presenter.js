@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { replace, render, remove } from '../framework/render.js';
 import FilmCardView from '../ view/film-card-view.js';
 import PopupView from '../ view/popup-view.js';
 
@@ -21,10 +21,14 @@ export default class FilmPresenter {
     this.#film = film;
     this.#comments = comments;
 
+    const prevFilmComponent = this.#filmComponent;
+    const prevPopupComponent = this.#popupComponent;
+
     this.#filmComponent = new FilmCardView({
       film: this.#film,
       onPopupClick: this.#handlePopupClick,
     });
+
     this.#popupComponent = new PopupView({
       film: {
         ...film,
@@ -32,7 +36,27 @@ export default class FilmPresenter {
       },
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
     });
-    render(this.#filmComponent, this.#filmListContainer);
+
+    if (prevFilmComponent === null || prevPopupComponent === null) {
+      render(this.#filmComponent, this.#filmListContainer);
+      return;
+    }
+
+    if (this.#filmListContainer.contains(prevFilmComponent.element)) {
+      replace(this.#filmComponent, prevFilmComponent);
+    }
+
+    if (this.#filmListContainer.contains(prevPopupComponent.element)) {
+      replace(this.#popupComponent, prevPopupComponent);
+    }
+
+    remove(prevFilmComponent);
+    remove(prevPopupComponent);
+  }
+
+  destroy() {
+    remove(this.#filmComponent);
+    remove(this.#popupComponent);
   }
 
   #escKeyDownHandler = (evt) => {
