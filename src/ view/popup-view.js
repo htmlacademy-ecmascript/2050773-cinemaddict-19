@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const createGenreTemplate = (film) => {
   const { filmInfo } = film;
-  return `<div class="event__available-offers">${filmInfo.genre.map(() => `<span class="film-details__genre">${filmInfo.genre}</span>`).join('')}`;
+  return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(',')}`;
 };
 
 const createCommentsTemplate = (comments) => `<ul class="film-details__comments-list">${comments.map((comment) =>
@@ -18,8 +18,7 @@ const createCommentsTemplate = (comments) => `<ul class="film-details__comments-
       <button class="film-details__comment-delete">Delete</button>
     </p>
   </div>
-</li>`
-)}</ul>`;
+</li>`).join('')}</ul>`;
 
 const createPopupTemplate = (film) => {
   const { filmInfo, comments } = film;
