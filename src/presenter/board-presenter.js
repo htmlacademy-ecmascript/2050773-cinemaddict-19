@@ -58,9 +58,13 @@ export default class BoardPresenter {
     }
   };
 
+  #handleModeChange = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.resetView());
+  };
+
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
-    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.#comments);
   };
 
   #renderSort() {
@@ -115,6 +119,8 @@ export default class BoardPresenter {
     const filmPresenter = new FilmPresenter({
       filmListContainer: filmsListContainerElement,
       popupContainer: this.#popupContainer,
+      onDataChange: this.#handleFilmChange,
+      onModeChange: this.#handleModeChange
     });
 
     filmPresenter.init(film, comments);

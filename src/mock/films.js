@@ -7,6 +7,9 @@ const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each
 const mockFilms = [
   {
     'id': '0',
+    isArchive: false,
+    isAlreadyWatched: false,
+    isAddedToWatch: false,
     'comments': [
       mockComments['14567'].id, mockComments['178967'].id
     ],
@@ -42,6 +45,9 @@ const mockFilms = [
   },
   {
     'id': '1',
+    isArchive: false,
+    isAlreadyWatched: false,
+    isAddedToWatch: false,
     'comments': [
       mockComments['2567'].id, mockComments['5673'].id
     ],
@@ -77,6 +83,9 @@ const mockFilms = [
   },
   {
     'id': '2',
+    isArchive: false,
+    isAlreadyWatched: false,
+    isAddedToWatch: false,
     'comments': [
       mockComments['9876'].id, mockComments['543123'].id
     ],
