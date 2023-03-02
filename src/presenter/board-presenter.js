@@ -21,6 +21,8 @@ export default class BoardPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #showMoreButtonComponent = null;
 
+  #filmPresenter = new Map();
+
   #films = [];
   #comments = [];
 
@@ -71,6 +73,13 @@ export default class BoardPresenter {
     render(this.#showMoreButtonComponent, this.#boardComponent.element);
   }
 
+  #clearFilmsList() {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this.#showMoreButtonComponent);
+  }
+
   #renderFilmsList() {
     render(this.#listComponent, this.#boardComponent.element);
     this.#renderFilmsListContainer();
@@ -103,6 +112,7 @@ export default class BoardPresenter {
     });
 
     filmPresenter.init(film, comments);
+    this.#filmPresenter.set(film.id, filmPresenter);
   }
 
   #renderBoard() {
