@@ -1,13 +1,12 @@
 import { RenderPosition, render, remove } from '../framework/render.js';
 import BoardView from '../ view/board-view.js';
 import FilterView from '../ view/filter-view.js';
-import PopupView from '../ view/popup-view.js';
 import SortView from '../ view/sort-view.js';
 import FilmsListView from '../ view/films-list-view.js';
 import FilmsListContainerView from '../ view/films-list-container-view';
-import FilmCardView from '../ view/film-card-view.js';
 import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
+import FilmPresenter from './film-presenter.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -77,7 +76,7 @@ export default class BoardPresenter {
     this.#renderFilmsListContainer();
 
     for (let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
-      this.#renderFilmCard(this.#films[i]);
+      this.#renderFilmCard(this.#films[i], this.#comments);
     }
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
@@ -95,45 +94,15 @@ export default class BoardPresenter {
       .forEach((film) => this.#renderFilmCard(film));
   }
 
-  #renderFilmCard(film) {
+  #renderFilmCard(film, comments) {
     const filmsListContainerElement = document.querySelector('.films-list__container');
 
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replacePopuptoCard.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-    const filmComponent = new FilmCardView({
-      film,
-      onPopupClick: () => {
-        replaceCardtoPopup.call(this);
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+    const filmPresenter = new FilmPresenter({
+      filmListContainer: filmsListContainerElement,
+      popupContainer: this.#popupContainer,
     });
 
-    const popupComponent = new PopupView({
-      film: {
-        ...film,
-        comments: film.comments.map((commentId) => this.#comments[commentId])
-      },
-      onPopupCloseButtonClick: () => {
-        replacePopuptoCard.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    function replaceCardtoPopup() {
-      this.#popupContainer.appendChild(popupComponent.element);
-    }
-
-    function replacePopuptoCard() {
-      popupComponent.element.remove();
-    }
-
-    render(filmComponent, filmsListContainerElement);
+    filmPresenter.init(film, comments);
   }
 
   #renderBoard() {
@@ -143,6 +112,7 @@ export default class BoardPresenter {
       this.#renderNoFilms();
       return;
     }
+
     this.#renderSort();
     this.#renderFilmsList();
     render(new FilmsListView(true, 'Top rated'), this.#boardContainer, RenderPosition.BEFOREEND);
