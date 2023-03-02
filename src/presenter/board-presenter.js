@@ -7,6 +7,7 @@ import FilmsListContainerView from '../ view/films-list-container-view';
 import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import FilmPresenter from './film-presenter.js';
+import { updateItem } from '../utils.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -55,6 +56,11 @@ export default class BoardPresenter {
     if (this.#renderedFilmCount >= this.#films.length) {
       remove(this.#showMoreButtonComponent);
     }
+  };
+
+  #handleFilmChange = (updatedFilm) => {
+    this.#films = updateItem(this.#films, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
   };
 
   #renderSort() {
