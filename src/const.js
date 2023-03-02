@@ -4,7 +4,6 @@ const FilterType = {
   FAVORITES: 'favorites',
 };
 
-
 const SortType = {
   DEFAULT: 'default',
   DATE: 'date',

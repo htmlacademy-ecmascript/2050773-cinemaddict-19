@@ -6,4 +6,6 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-export {getRandomArrayElement, updateItem};
+const sortRating = (filmA, filmB) => filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
+
+export {getRandomArrayElement, updateItem, sortRating};

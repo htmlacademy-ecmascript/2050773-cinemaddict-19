@@ -8,6 +8,8 @@ import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import FilmPresenter from './film-presenter.js';
 import { updateItem } from '../utils.js';
+import { sortRating } from '../utils.js';
+import { SortType } from '../const.js';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -23,6 +25,8 @@ export default class BoardPresenter {
   #showMoreButtonComponent = null;
 
   #filmPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedFilms = [];
 
   #films = [];
   #comments = [];
@@ -30,7 +34,7 @@ export default class BoardPresenter {
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
 
-  #sortComponent = new SortView();
+  #sortComponent = null;
   #noFilmsComponent = new NoFilmView();
 
   constructor({boardContainer, popupContainer, filmsModel, commentsModel}) {
@@ -42,6 +46,7 @@ export default class BoardPresenter {
 
   init() {
     this.#films = [...this.#filmsModel.films];
+    this.#sourcedFilms = [...this.#filmsModel.films];
     this.#comments = this.#commentsModel.comments;
 
     this.#renderBoard();
@@ -64,10 +69,37 @@ export default class BoardPresenter {
 
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
+    this.#sourcedFilms = updateItem(this.#sourcedFilms, updatedFilm);
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm, this.#comments);
   };
 
+  #sortFilms(sortType) {
+    switch (sortType) {
+      case SortType.RATING:
+        this.#films.sort(sortRating);
+        break;
+      default:
+        this.#films = [...this.#sourcedFilms];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortFilms(sortType);
+    this.#clearFilmsList();
+    this.#renderFilmsList();
+  };
+
   #renderSort() {
+    this.#sortComponent = new SortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+
     render(this.#sortComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
   }
 
@@ -110,7 +142,7 @@ export default class BoardPresenter {
   #renderFilmCards(from, to) {
     this.#films
       .slice(from, to)
-      .forEach((film) => this.#renderFilmCard(film));
+      .forEach((film, comments) => this.#renderFilmCard(film, comments));
   }
 
   #renderFilmCard(film, comments) {
