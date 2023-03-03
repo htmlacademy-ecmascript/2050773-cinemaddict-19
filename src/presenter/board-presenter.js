@@ -15,7 +15,7 @@ const FILM_COUNT_PER_STEP = 5;
 
 export default class BoardPresenter {
   #boardContainer = null;
-  #popupContainer = null;
+  #bodyContainer = null;
   #filmsModel = null;
   #commentsModel = null;
 
@@ -37,9 +37,9 @@ export default class BoardPresenter {
   #sortComponent = null;
   #noFilmsComponent = new NoFilmView();
 
-  constructor({boardContainer, popupContainer, filmsModel, commentsModel}) {
+  constructor({boardContainer, bodyContainer, filmsModel, commentsModel}) {
     this.#boardContainer = boardContainer;
-    this.#popupContainer = popupContainer;
+    this.#bodyContainer = bodyContainer;
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
   }
@@ -74,15 +74,15 @@ export default class BoardPresenter {
   };
 
   #sortFilms(sortType) {
-    switch (sortType) {
-      case SortType.RATING:
+    this.#currentSortType = sortType;
+
+    switch (this.#currentSortType) {
+      case this.#currentSortType.RATING:
         this.#films.sort(sortRating);
         break;
       default:
         this.#films = [...this.#sourcedFilms];
     }
-
-    this.#currentSortType = sortType;
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -123,10 +123,11 @@ export default class BoardPresenter {
   }
 
   #renderFilmsList() {
+    const MIN_VALUE_FILM_COUNT = Math.min(this.#films.length, FILM_COUNT_PER_STEP);
     render(this.#listComponent, this.#boardComponent.element);
-    this.#renderFilmsListContainer();
+    render(this.#listContainerComponent, this.#boardComponent.element);
 
-    for (let i = 0; i < Math.min(this.#films.length, FILM_COUNT_PER_STEP); i++) {
+    for (let i = 0; i < MIN_VALUE_FILM_COUNT; i++) {
       this.#renderFilmCard(this.#films[i], this.#comments);
     }
 
@@ -135,14 +136,10 @@ export default class BoardPresenter {
     }
   }
 
-  #renderFilmsListContainer() {
-    render(this.#listContainerComponent, this.#boardComponent.element);
-  }
-
   #renderFilmCards(from, to) {
     this.#films
       .slice(from, to)
-      .forEach((film, comments) => this.#renderFilmCard(film, comments));
+      .forEach((film) => this.#renderFilmCard(film, this.#comments));
   }
 
   #renderFilmCard(film, comments) {
@@ -150,7 +147,7 @@ export default class BoardPresenter {
 
     const filmPresenter = new FilmPresenter({
       filmListContainer: filmsListContainerElement,
-      popupContainer: this.#popupContainer,
+      bodyContainer: this.#bodyContainer,
       onDataChange: this.#handleFilmChange,
       onModeChange: this.#handleModeChange
     });

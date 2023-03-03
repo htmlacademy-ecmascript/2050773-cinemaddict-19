@@ -9,7 +9,7 @@ const Mode = {
 
 export default class FilmPresenter {
   #filmListContainer = null;
-  #popupContainer = null;
+  #bodyContainer = null;
   #handleDataChange = null;
   #handleModeChange = null;
 
@@ -20,9 +20,9 @@ export default class FilmPresenter {
   #comments = null;
   #mode = Mode.DEFAULT;
 
-  constructor({filmListContainer, popupContainer, onDataChange, onModeChange}) {
+  constructor({filmListContainer, bodyContainer, onDataChange, onModeChange}) {
     this.#filmListContainer = filmListContainer;
-    this.#popupContainer = popupContainer;
+    this.#bodyContainer = bodyContainer;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
@@ -87,7 +87,7 @@ export default class FilmPresenter {
   };
 
   #replaceCardToPopup() {
-    this.#popupContainer.appendChild(this.#popupComponent.element);
+    this.#bodyContainer.appendChild(this.#popupComponent.element);
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.POPUP;
@@ -104,19 +104,19 @@ export default class FilmPresenter {
   };
 
   #handleAlreadyWatchedClick = () => {
-    this.#handleDataChange({...this.#film, isAlreadyWatched: !this.#film.isAlreadyWatched});
+    this.#handleDataChange({...this.#film, isAlreadyWatched: !this.#film.userDetails.alreadyWatched});
   };
 
   #handleAddToWatchClick = () => {
-    this.#handleDataChange({...this.#film, isAddedToWatch: !this.#film.isAddToWatch});
+    this.#handleDataChange({...this.#film, isAddedToWatch: !this.#film.userDetails.watchlist});
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#film, isFavorite: !this.#film.isFavorite});
+    this.#handleDataChange({...this.#film, isFavorite: !this.#film.userDetails.favorite});
   };
 
-  #handlePopupCloseButtonClick = (film, comments) => {
-    this.#handleDataChange(film, comments);
+  #handlePopupCloseButtonClick = (film) => {
+    this.#handleDataChange(film);
     this.#replacePopupToCard();
   };
 }
