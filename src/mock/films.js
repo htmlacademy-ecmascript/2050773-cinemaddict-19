@@ -13,7 +13,7 @@ const mockFilms = [
     'filmInfo': {
       'title': 'A Little Pony Without The Carpet',
       'alternativeTitle': 'Laziness Who Sold Themselves',
-      'totalRating': 5.3,
+      'totalRating': 15.3,
       'poster': POSTERS[3],
       'ageRating': 0,
       'director': 'Tom Ford',
@@ -48,7 +48,7 @@ const mockFilms = [
     'filmInfo': {
       'title': 'M3GAN',
       'alternativeTitle': 'M3GAN',
-      'totalRating': 3.3,
+      'totalRating': 33.3,
       'poster': POSTERS[1],
       'ageRating': 18,
       'director': 'Gerard Johnstone',
@@ -78,7 +78,7 @@ const mockFilms = [
   {
     'id': '2',
     'comments': [
-      mockComments['9876'].id, mockComments['543123'].id
+      mockComments['9876'].id, mockComments['543123'].id, mockComments['2567'].id, mockComments['5673'].id
     ],
     'filmInfo': {
       'title': 'The Menu',

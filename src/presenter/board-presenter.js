@@ -7,8 +7,8 @@ import FilmsListContainerView from '../ view/films-list-container-view';
 import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import FilmPresenter from './film-presenter.js';
-import { updateItem } from '../utils.js';
-import { sortRating } from '../utils.js';
+import { updateItem, getTopRatedFilms, getMostCommentedFilms } from '../utils.js';
+import { sortByRating } from '../utils.js';
 import { SortType } from '../const.js';
 
 const FILM_COUNT_PER_STEP = 5;
@@ -33,6 +33,8 @@ export default class BoardPresenter {
 
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
+  #listTopRatedContainerComponent = new FilmsListContainerView(true, 'top-rated');
+  #listMostCommentedContainerComponent = new FilmsListContainerView(true, 'most-commented');
 
   #sortComponent = null;
   #noFilmsComponent = new NoFilmView();
@@ -78,7 +80,7 @@ export default class BoardPresenter {
 
     switch (this.#currentSortType) {
       case this.#currentSortType.RATING:
-        this.#films.sort(sortRating);
+        this.#films.sort(sortByRating);
         break;
       default:
         this.#films = [...this.#sourcedFilms];
@@ -112,7 +114,7 @@ export default class BoardPresenter {
       onClick: this.#handleShowMoreButtonClick
     });
 
-    render(this.#showMoreButtonComponent, this.#boardComponent.element);
+    render(this.#showMoreButtonComponent, this.#listComponent.element);
   }
 
   #clearFilmsList() {
@@ -124,8 +126,9 @@ export default class BoardPresenter {
 
   #renderFilmsList() {
     const MIN_VALUE_FILM_COUNT = Math.min(this.#films.length, FILM_COUNT_PER_STEP);
+
     render(this.#listComponent, this.#boardComponent.element);
-    render(this.#listContainerComponent, this.#boardComponent.element);
+    render(this.#listContainerComponent, this.#listComponent.element);
 
     for (let i = 0; i < MIN_VALUE_FILM_COUNT; i++) {
       this.#renderFilmCard(this.#films[i], this.#comments);
@@ -156,6 +159,48 @@ export default class BoardPresenter {
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
+  #renderTopRatedFilms() {
+    const filmsExtraComponent = new FilmsListView(true, 'Top rated');
+
+    render(filmsExtraComponent, this.#boardComponent.element, RenderPosition.BEFOREEND);
+    render(this.#listTopRatedContainerComponent, filmsExtraComponent.element);
+
+    const topRatedFilms = getTopRatedFilms(this.#films);
+    const filmsListTopRatedContainerElement = document.querySelector('.top-rated');
+
+    const filmExtraPresenter = new FilmPresenter({
+      filmListContainer: filmsListTopRatedContainerElement,
+      bodyContainer: this.#bodyContainer,
+      onDataChange: this.#handleFilmChange,
+      onModeChange: this.#handleModeChange
+    });
+
+    for (const topRatedFilm of topRatedFilms) {
+      filmExtraPresenter.init(topRatedFilm, this.#comments);
+    }
+  }
+
+  #renderMostCommentedFilms() {
+    const filmsExtraComponent = new FilmsListView(true, 'Most commented');
+
+    render(filmsExtraComponent, this.#boardComponent.element, RenderPosition.BEFOREEND);
+    render(this.#listMostCommentedContainerComponent, filmsExtraComponent.element);
+
+    const mostCommentedFilms = getMostCommentedFilms(this.#films);
+    const filmsListMostCommentedContainerElement = document.querySelector('.most-commented');
+
+    const filmExtraPresenter = new FilmPresenter({
+      filmListContainer: filmsListMostCommentedContainerElement,
+      bodyContainer: this.#bodyContainer,
+      onDataChange: this.#handleFilmChange,
+      onModeChange: this.#handleModeChange
+    });
+
+    for (const mostCommentedFilm of mostCommentedFilms) {
+      filmExtraPresenter.init(mostCommentedFilm, this.#comments);
+    }
+  }
+
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
 
@@ -166,7 +211,7 @@ export default class BoardPresenter {
 
     this.#renderSort();
     this.#renderFilmsList();
-    render(new FilmsListView(true, 'Top rated'), this.#boardContainer, RenderPosition.BEFOREEND);
-    render(new FilmsListView(true, 'Most commented'), this.#boardContainer, RenderPosition.BEFOREEND);
+    this.#renderTopRatedFilms();
+    this.#renderMostCommentedFilms();
   }
 }
