@@ -1,4 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(duration);
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const createGenreTemplate = (film) => {
   const { filmInfo } = film;
@@ -15,7 +20,7 @@ function createCommentsTemplate(comments) {
           <p class="film-details__comment-text">${comment.comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
-            <span class="film-details__comment-day">2019/12/31 23:59</span>
+            <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>
             <button class="film-details__comment-delete">Delete</button>
           </p>
         </div>
