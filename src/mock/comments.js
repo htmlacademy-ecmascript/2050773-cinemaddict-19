@@ -9,7 +9,7 @@ const mockComments = {
   '178967': {
     'id': '178967',
     'author': 'Somebody Anybody',
-    'comment': 'Entrypoint main 248 KiB.',
+    'comment': 'A rose will bloom. It then will fade. So does a youth. So does the fairest maid',
     'date': '2022-09-11T16:12:32.554Z',
     'emotion': 'smile'
   },
@@ -38,7 +38,7 @@ const mockComments = {
   '5432': {
     'id': '5432',
     'author': 'Who are you',
-    'comment': 'compiled successfully in 91 ms',
+    'comment': 'Comes a time when one sweet smile',
     'date': '2022-02-02T16:12:32.554Z',
     'emotion': 'sleeping'
   },
@@ -52,7 +52,7 @@ const mockComments = {
   '543123': {
     'id': '543123',
     'author': 'Hide and seek',
-    'comment': 'main.bee424674dd243449492.hot-update.js',
+    'comment': 'What is a youth? Impetuous fire. What is a maid? Ice and desire. The world wags on',
     'date': '2023-01-01T16:12:32.554Z',
     'emotion': 'puke'
   }

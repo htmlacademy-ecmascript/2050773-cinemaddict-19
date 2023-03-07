@@ -1,28 +1,35 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
 
 const createGenreTemplate = (film) => {
   const { filmInfo } = film;
-  return `<div class="event__available-offers">${filmInfo.genre.map(() => `<span class="film-details__genre">${filmInfo.genre}</span>`).join('')}`;
+  return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(',')}`;
 };
 
-const createCommentsTemplate = (comments) => `<ul class="film-details__comments-list">${comments.map((comment) =>
-  ` <li class="film-details__comment">
-  <span class="film-details__comment-emoji">
-    <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
-  </span>
-  <div>
-    <p class="film-details__comment-text">${comment.comment}</p>
-    <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${comment.author}</span>
-      <span class="film-details__comment-day">2019/12/31 23:59</span>
-      <button class="film-details__comment-delete">Delete</button>
-    </p>
-  </div>
-</li>`
-)}</ul>`;
+function createCommentsTemplate(comments) {
+  return `<ul class="film-details__comments-list">${comments.map((comment) =>
+    ` <li class="film-details__comment">
+        <span class="film-details__comment-emoji">
+          <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
+        </span>
+        <div>
+          <p class="film-details__comment-text">${comment.comment}</p>
+          <p class="film-details__comment-info">
+            <span class="film-details__comment-author">${comment.author}</span>
+            <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>
+            <button class="film-details__comment-delete">Delete</button>
+          </p>
+        </div>
+      </li>`).join('')}</ul>`;
+}
 
-const createPopupTemplate = (film) => {
-  const { filmInfo, comments } = film;
+const createPopupTemplate = (film, comments) => {
+  const { filmInfo } = film;
   const genresTemplate = createGenreTemplate(film);
   const commentsTemplate = createCommentsTemplate(comments);
 
@@ -139,21 +146,24 @@ const createPopupTemplate = (film) => {
 export default class PopupView extends AbstractView {
   #film = null;
   #handlePopupClick = null;
+  #comments = null;
 
-  constructor({film, onPopupCloseButtonClick}) {
+  constructor({film, comments, onPopupCloseButtonClick}) {
     super();
     this.#film = film;
     this.#handlePopupClick = onPopupCloseButtonClick;
-
+    this.#comments = comments;
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
   get template() {
-    return createPopupTemplate(this.#film);
+    return createPopupTemplate(this.#film, this.#comments);
   }
 
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
-    this.#handlePopupClick();
+    this.#handlePopupClick({
+      ...this.#film
+    });
   };
 }
