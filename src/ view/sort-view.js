@@ -11,10 +11,9 @@ const createSortTemplate = () =>
 export default class SortView extends AbstractView {
   #handleSortTypeChange = null;
 
-  constructor({onSortTypeChange}) {
+  constructor({ onSortTypeChange }) {
     super();
     this.#handleSortTypeChange = onSortTypeChange;
-
     this.element.addEventListener('click', this.#sortTypeChangeHandler);
   }
 
@@ -29,5 +28,7 @@ export default class SortView extends AbstractView {
 
     evt.preventDefault();
     this.#handleSortTypeChange(evt.target.dataset.sortType);
+    this.element.querySelectorAll('.sort__button').forEach((button) => button.classList.remove('sort__button--active'));
+    evt.target.classList.add('sort__button--active');
   };
 }

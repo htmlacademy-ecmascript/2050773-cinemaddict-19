@@ -8,7 +8,7 @@ import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import FilmPresenter from './film-presenter.js';
 import { updateItem, getTopRatedFilms, getMostCommentedFilms } from '../utils.js';
-import { sortByRating } from '../utils.js';
+import { sortByRating, sortByDate } from '../utils.js';
 import { SortType } from '../const.js';
 
 const FILM_COUNT_PER_STEP = 5;
@@ -26,6 +26,7 @@ export default class BoardPresenter {
 
   #filmPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
+
   #sourcedFilms = [];
 
   #films = [];
@@ -76,24 +77,26 @@ export default class BoardPresenter {
   };
 
   #sortFilms(sortType) {
-    this.#currentSortType = sortType;
-
-    switch (this.#currentSortType) {
-      case this.#currentSortType.RATING:
+    switch (sortType) {
+      case SortType.DATE:
+        this.#films.sort(sortByDate);
+        break;
+      case SortType.RATING:
         this.#films.sort(sortByRating);
         break;
       default:
         this.#films = [...this.#sourcedFilms];
     }
+
+    this.#currentSortType = sortType;
   }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
-
-    this.#sortFilms(sortType);
     this.#clearFilmsList();
+    this.#sortFilms(sortType);
     this.#renderFilmsList();
   };
 
