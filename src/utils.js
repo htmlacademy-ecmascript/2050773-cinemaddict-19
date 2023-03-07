@@ -10,15 +10,9 @@ function updateItem(items, update) {
   return items.map((item) => item.id === update.id ? update : item);
 }
 
-const getTopRatedFilms = (films) => {
-  const topRatedTwoFilms = Array.from(films.values()).sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating).slice(0, FILMS_EXTRA_COUNT);
-  return topRatedTwoFilms;
-};
+const getTopRatedFilms = (films) => Array.from(films.values()).sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating).slice(0, FILMS_EXTRA_COUNT);
 
-const getMostCommentedFilms = (films) => {
-  const topRatedTwoFilms = Array.from(films.values()).sort((a, b) => b.comments.length - a.comments.length).slice(0, FILMS_EXTRA_COUNT);
-  return topRatedTwoFilms;
-};
+const getMostCommentedFilms = (films) => Array.from(films.values()).sort((a, b) => b.comments.length - a.comments.length).slice(0, FILMS_EXTRA_COUNT);
 
 function getWeightForNullData(dataA, dataB) {
   if (dataA === null && dataB === null) {

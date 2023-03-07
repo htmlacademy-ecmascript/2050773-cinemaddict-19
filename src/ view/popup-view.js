@@ -1,8 +1,9 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-dayjs.extend(duration);
 import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
 const createGenreTemplate = (film) => {
@@ -27,8 +28,8 @@ function createCommentsTemplate(comments) {
       </li>`).join('')}</ul>`;
 }
 
-const createPopupTemplate = (film) => {
-  const { filmInfo, comments } = film;
+const createPopupTemplate = (film, comments) => {
+  const { filmInfo } = film;
   const genresTemplate = createGenreTemplate(film);
   const commentsTemplate = createCommentsTemplate(comments);
 
@@ -145,21 +146,24 @@ const createPopupTemplate = (film) => {
 export default class PopupView extends AbstractView {
   #film = null;
   #handlePopupClick = null;
+  #comments = null;
 
-  constructor({film, onPopupCloseButtonClick}) {
+  constructor({film, comments, onPopupCloseButtonClick}) {
     super();
     this.#film = film;
     this.#handlePopupClick = onPopupCloseButtonClick;
-
+    this.#comments = comments;
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
   get template() {
-    return createPopupTemplate(this.#film);
+    return createPopupTemplate(this.#film, this.#comments);
   }
 
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
-    this.#handlePopupClick(this.#film);
+    this.#handlePopupClick({
+      ...this.#film
+    });
   };
 }

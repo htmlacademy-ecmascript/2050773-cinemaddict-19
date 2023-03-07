@@ -9,7 +9,7 @@ const Mode = {
 
 export default class FilmPresenter {
   #filmListContainer = null;
-  #bodyContainer = null;
+  #bodyElement = null;
   #handleDataChange = null;
   #handleModeChange = null;
 
@@ -20,9 +20,9 @@ export default class FilmPresenter {
   #comments = null;
   #mode = Mode.DEFAULT;
 
-  constructor({filmListContainer, bodyContainer, onDataChange, onModeChange}) {
+  constructor({filmListContainer, bodyElement, onDataChange, onModeChange}) {
     this.#filmListContainer = filmListContainer;
-    this.#bodyContainer = bodyContainer;
+    this.#bodyElement = bodyElement;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
   }
@@ -43,10 +43,8 @@ export default class FilmPresenter {
     });
 
     this.#popupComponent = new PopupView({
-      film: {
-        ...film,
-        comments: film.comments.map((commentId) => this.#comments[commentId])
-      },
+      film,
+      comments: film.comments.map((commentId) => this.#comments[commentId]),
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
     });
 
@@ -63,8 +61,8 @@ export default class FilmPresenter {
       replace(this.#popupComponent, prevPopupComponent);
     }
 
-    remove(prevFilmComponent);
-    remove(prevPopupComponent);
+    // remove(prevFilmComponent);
+    // remove(prevPopupComponent);
   }
 
   destroy() {
@@ -87,7 +85,7 @@ export default class FilmPresenter {
   };
 
   #replaceCardToPopup() {
-    this.#bodyContainer.appendChild(this.#popupComponent.element);
+    this.#bodyElement.appendChild(this.#popupComponent.element);
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.POPUP;

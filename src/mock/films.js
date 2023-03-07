@@ -1,7 +1,7 @@
 import { getRandomArrayElement } from '../utils.js';
 import { mockComments } from './comments.js';
 
-const POSTERS = ['images/posters/blue-blazes.jpg', 'images/posters/made-for-each-other.png',
+const POSTERS = ['images/posters/sagebrush-trail.jpg', 'images/posters/made-for-each-other.png',
   'images/posters/popeye-meets-sinbad.png', 'images/posters/the-dance-of-life.jpg'];
 
 const mockFilms = [
@@ -107,6 +107,41 @@ const mockFilms = [
       'watchlist': true,
       'alreadyWatched': true,
       'watchingDate': '2023-12-12T16:12:32.554Z',
+      'favorite': false
+    }
+  },
+  {
+    'id': '2',
+    'comments': [
+      mockComments['9876'].id
+    ],
+    'filmInfo': {
+      'title': 'Blue Blazes',
+      'alternativeTitle': 'Aoi Honō',
+      'totalRating': 555,
+      'poster': POSTERS[0],
+      'ageRating': 38,
+      'director': ' Yuichi Fukuda',
+      'writers': [
+        ' Kazuhiko Shimamoto'
+      ],
+      'actors': [
+        'Anime character'
+      ],
+      'release': {
+        'date': '2023-03-03T00:00:00.000Z',
+        'releaseCountry': 'Japan'
+      },
+      'duration': 57,
+      'genre': [
+        'Comedy', 'Horror','Anime',
+      ],
+      'description': 'Japanese coming-of-age manga series written and illustrated by Kazuhiko Shimamoto. It was serialized in Shogakukan\'s seinen manga magazine'
+    },
+    'userDetails': {
+      'watchlist': true,
+      'alreadyWatched': true,
+      'watchingDate': '2023-03-03T16:12:32.554Z',
       'favorite': false
     }
   }

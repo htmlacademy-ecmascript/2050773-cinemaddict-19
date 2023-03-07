@@ -20,7 +20,7 @@ const commentsModel = new CommentsModel();
 
 const boardPresenter = new BoardPresenter({
   boardContainer: mainElement,
-  bodyContainer: bodyElement,
+  bodyElement: bodyElement,
   filmsModel, commentsModel
 });
 

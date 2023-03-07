@@ -15,7 +15,7 @@ const FILM_COUNT_PER_STEP = 5;
 
 export default class BoardPresenter {
   #boardContainer = null;
-  #bodyContainer = null;
+  #bodyElement = null;
   #filmsModel = null;
   #commentsModel = null;
 
@@ -39,9 +39,9 @@ export default class BoardPresenter {
   #sortComponent = null;
   #noFilmsComponent = new NoFilmView();
 
-  constructor({boardContainer, bodyContainer, filmsModel, commentsModel}) {
+  constructor({boardContainer, bodyElement, filmsModel, commentsModel}) {
     this.#boardContainer = boardContainer;
-    this.#bodyContainer = bodyContainer;
+    this.#bodyElement = bodyElement;
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
   }
@@ -125,13 +125,13 @@ export default class BoardPresenter {
   }
 
   #renderFilmsList() {
-    const MIN_VALUE_FILM_COUNT = Math.min(this.#films.length, FILM_COUNT_PER_STEP);
+    const minValueFilmCount = Math.min(this.#films.length, FILM_COUNT_PER_STEP);
 
     render(this.#listComponent, this.#boardComponent.element);
     render(this.#listContainerComponent, this.#listComponent.element);
 
-    for (let i = 0; i < MIN_VALUE_FILM_COUNT; i++) {
-      this.#renderFilmCard(this.#films[i], this.#comments);
+    for (let i = 0; i < minValueFilmCount; i++) {
+      this.#renderFilmCard(this.#films[i]);
     }
 
     if (this.#films.length > FILM_COUNT_PER_STEP) {
@@ -142,20 +142,20 @@ export default class BoardPresenter {
   #renderFilmCards(from, to) {
     this.#films
       .slice(from, to)
-      .forEach((film) => this.#renderFilmCard(film, this.#comments));
+      .forEach((film) => this.#renderFilmCard(film));
   }
 
-  #renderFilmCard(film, comments) {
+  #renderFilmCard(film) {
     const filmsListContainerElement = document.querySelector('.films-list__container');
 
     const filmPresenter = new FilmPresenter({
       filmListContainer: filmsListContainerElement,
-      bodyContainer: this.#bodyContainer,
+      bodyElement: this.#bodyElement,
       onDataChange: this.#handleFilmChange,
       onModeChange: this.#handleModeChange
     });
 
-    filmPresenter.init(film, comments);
+    filmPresenter.init(film, this.#comments);
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
@@ -168,15 +168,17 @@ export default class BoardPresenter {
     const topRatedFilms = getTopRatedFilms(this.#films);
     const filmsListTopRatedContainerElement = document.querySelector('.top-rated');
 
-    const filmExtraPresenter = new FilmPresenter({
-      filmListContainer: filmsListTopRatedContainerElement,
-      bodyContainer: this.#bodyContainer,
-      onDataChange: this.#handleFilmChange,
-      onModeChange: this.#handleModeChange
-    });
-
     for (const topRatedFilm of topRatedFilms) {
+
+      const filmExtraPresenter = new FilmPresenter({
+        filmListContainer: filmsListTopRatedContainerElement,
+        bodyElement: this.#bodyElement,
+        onDataChange: this.#handleFilmChange,
+        onModeChange: this.#handleModeChange
+      });
+
       filmExtraPresenter.init(topRatedFilm, this.#comments);
+      this.#filmPresenter.set(topRatedFilm.id, filmExtraPresenter);
     }
   }
 
@@ -189,15 +191,17 @@ export default class BoardPresenter {
     const mostCommentedFilms = getMostCommentedFilms(this.#films);
     const filmsListMostCommentedContainerElement = document.querySelector('.most-commented');
 
-    const filmExtraPresenter = new FilmPresenter({
-      filmListContainer: filmsListMostCommentedContainerElement,
-      bodyContainer: this.#bodyContainer,
-      onDataChange: this.#handleFilmChange,
-      onModeChange: this.#handleModeChange
-    });
-
     for (const mostCommentedFilm of mostCommentedFilms) {
+
+      const filmExtraPresenter = new FilmPresenter({
+        filmListContainer: filmsListMostCommentedContainerElement,
+        bodyElement: this.#bodyElement,
+        onDataChange: this.#handleFilmChange,
+        onModeChange: this.#handleModeChange
+      });
+
       filmExtraPresenter.init(mostCommentedFilm, this.#comments);
+      this.#filmPresenter.set(mostCommentedFilm.id, filmExtraPresenter);
     }
   }
 
