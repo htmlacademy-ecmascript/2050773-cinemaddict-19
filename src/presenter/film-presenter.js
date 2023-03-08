@@ -72,6 +72,7 @@ export default class FilmPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#popupComponent.reset(this.#film);
       this.#replacePopupToCard();
     }
   }
@@ -79,6 +80,7 @@ export default class FilmPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#popupComponent.reset(this.#film);
       this.#replacePopupToCard();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }

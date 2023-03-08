@@ -12,9 +12,9 @@ const createGenreTemplate = (film) => {
   return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(',')}`;
 };
 
-function createEmojisTemplate() {
+function createEmojisTemplate(currentEmoji) {
   return EMOJIS.map((emoji) => `
-  <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
+  <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}" ${emoji === currentEmoji ? 'checked' : ''}>
   <label class="film-details__emoji-label" for="emoji-${emoji}">
     <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="${emoji}">
   </label>`).join('');
@@ -41,7 +41,7 @@ const createPopupTemplate = (film, comments) => {
   const { filmInfo, currentEmoji } = film;
   const genresTemplate = createGenreTemplate(film);
   const commentsTemplate = createCommentsTemplate(comments);
-  const emojisTemplate = createEmojisTemplate();
+  const emojisTemplate = createEmojisTemplate(currentEmoji);
 
   return `<section class="film-details">
     <div class="film-details__inner">
@@ -158,6 +158,12 @@ export default class PopupView extends AbstractStatefulView {
 
   get template() {
     return createPopupTemplate(this._state, this.#comments);
+  }
+
+  reset(film) {
+    this.updateElement(
+      PopupView.parseFilmToState(film),
+    );
   }
 
   _restoreHandlers() {
