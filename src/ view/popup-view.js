@@ -1,7 +1,8 @@
-import AbstractView from '../framework/view/abstract-view.js';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { EMOJIS } from '../const.js';
 
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
@@ -11,11 +12,19 @@ const createGenreTemplate = (film) => {
   return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(',')}`;
 };
 
+function createEmojisTemplate() {
+  return EMOJIS.map((emoji) => `
+  <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value="${emoji}">
+  <label class="film-details__emoji-label" for="emoji-${emoji}">
+    <img src="./images/emoji/${emoji}.png" width="30" height="30" alt="${emoji}">
+  </label>`).join('');
+}
+
 function createCommentsTemplate(comments) {
   return `<ul class="film-details__comments-list">${comments.map((comment) =>
     ` <li class="film-details__comment">
         <span class="film-details__comment-emoji">
-          <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
+          <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
         </span>
         <div>
           <p class="film-details__comment-text">${comment.comment}</p>
@@ -29,9 +38,10 @@ function createCommentsTemplate(comments) {
 }
 
 const createPopupTemplate = (film, comments) => {
-  const { filmInfo } = film;
+  const { filmInfo, currentEmoji } = film;
   const genresTemplate = createGenreTemplate(film);
   const commentsTemplate = createCommentsTemplate(comments);
+  const emojisTemplate = createEmojisTemplate();
 
   return `<section class="film-details">
     <div class="film-details__inner">
@@ -90,7 +100,9 @@ const createPopupTemplate = (film, comments) => {
             </table>
 
             <p class="film-details__film-description">
+
              ${filmInfo.description}
+
             </p>
           </div>
         </div>
@@ -109,33 +121,20 @@ const createPopupTemplate = (film, comments) => {
           ${commentsTemplate}
 
           <form class="film-details__new-comment" action="" method="get">
-            <div class="film-details__add-emoji-label"></div>
+            <div class="film-details__add-emoji-label">
 
-            <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-            </label>
+            <img src="images/emoji/${currentEmoji}.png" width="55" height="55" alt="emoji-${currentEmoji}">
 
-            <div class="film-details__emoji-list">
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
-              <label class="film-details__emoji-label" for="emoji-smile">
-                <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
-              </label>
-
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
-              <label class="film-details__emoji-label" for="emoji-sleeping">
-                <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
-              </label>
-
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
-              <label class="film-details__emoji-label" for="emoji-puke">
-                <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
-              </label>
-
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
-              <label class="film-details__emoji-label" for="emoji-angry">
-                <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
-              </label>
             </div>
+
+              <label class="film-details__comment-label">
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+              </label>
+              <div class="film-details__emoji-list">
+
+              ${emojisTemplate}
+
+              </div>
           </form>
         </section>
       </div>
@@ -143,27 +142,50 @@ const createPopupTemplate = (film, comments) => {
   </section>`;
 };
 
-export default class PopupView extends AbstractView {
-  #film = null;
+export default class PopupView extends AbstractStatefulView {
   #handlePopupClick = null;
   #comments = null;
 
   constructor({film, comments, onPopupCloseButtonClick}) {
     super();
-    this.#film = film;
-    this.#handlePopupClick = onPopupCloseButtonClick;
     this.#comments = comments;
+    this._setState(PopupView.parseFilmToState(film));
+    this.#handlePopupClick = onPopupCloseButtonClick;
+    this._restoreHandlers();
+
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
   get template() {
-    return createPopupTemplate(this.#film, this.#comments);
+    return createPopupTemplate(this._state, this.#comments);
   }
+
+  _restoreHandlers() {
+    this.element.querySelector('.film-details__new-comment').addEventListener('change', this.#emojiChangeHandler);
+  }
+
+  #emojiChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateElement({
+      currentEmoji: evt.target.value,
+    });
+  };
 
   #popupCloseHandler = (evt) => {
     evt.preventDefault();
-    this.#handlePopupClick({
-      ...this.#film
-    });
+    this.#handlePopupClick(PopupView.parseStateToFilm(this._state));
   };
+
+  static parseFilmToState(film) {
+    return {...film,
+      currentEmoji: 'smile'
+    };
+  }
+
+  static parseStateToFilm(state) {
+    const film = {...state};
+
+    delete film.currentEmoji;
+    return film;
+  }
 }
