@@ -83,11 +83,11 @@ const createPopupTemplate = (film, comments) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">30 March 1945</td>
+                <td class="film-details__cell">${dayjs(filmInfo.release.date).format('DD MMMM YYYY')}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Duration</td>
-                <td class="film-details__cell">1h 18m</td>
+                <td class="film-details__cell">${dayjs.duration(filmInfo.duration, 'minutes').format('H[h] mm[m]')}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
@@ -168,6 +168,7 @@ export default class PopupView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element.querySelector('.film-details__new-comment').addEventListener('change', this.#emojiChangeHandler);
+    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
   }
 
   #emojiChangeHandler = (evt) => {
