@@ -2,7 +2,11 @@ import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 
 const createFilmCardTemplate = (film) => {
-  const {filmInfo} = film;
+  const {filmInfo, isFavorite, isAddedToWatch, isAlreadyWatched} = film;
+
+  const favoriteClassName = isFavorite ? 'film-card__controls-item--active' : '';
+  const watchlistClassName = isAddedToWatch ? 'film-card__controls-item--active' : '';
+  const watchedClassName = isAlreadyWatched ? 'film-card__controls-item--active' : '';
 
   return `<article class="film-card">
     <a class="film-card__link">
@@ -17,9 +21,9 @@ const createFilmCardTemplate = (film) => {
       <p class="film-card__description">${filmInfo.description}</span>
     </a>
     <div class="film-card__controls">
-      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist film-card__controls-item--active" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-      <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+      <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchlistClassName}" type="button">Add to watchlist</button>
+      <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${watchedClassName}" type="button">Mark as watched</button>
+      <button class="film-card__controls-item film-card__controls-item--favorite ${favoriteClassName}" type="button">Mark as favorite</button>
     </div>
   </article>`;
 };

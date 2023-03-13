@@ -1,3 +1,5 @@
+const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];
+
 const FilterType = {
   WATCHLIST: 'Watchlist',
   HISTORY: 'history',
@@ -10,6 +12,16 @@ const SortType = {
   RATING: 'rating',
 };
 
-const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
 
-export { FilterType, SortType, EMOJIS };
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+export { FilterType, SortType, EMOJIS, UserAction, UpdateType };

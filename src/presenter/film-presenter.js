@@ -1,6 +1,7 @@
 import { replace, render, remove } from '../framework/render.js';
 import FilmCardView from '../ view/film-card-view.js';
 import PopupView from '../ view/popup-view.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -104,19 +105,35 @@ export default class FilmPresenter {
   };
 
   #handleAlreadyWatchedClick = () => {
-    this.#handleDataChange({...this.#film, isAlreadyWatched: !this.#film.userDetails.alreadyWatched});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isAlreadyWatched: !this.#film.userDetails.alreadyWatched}
+    );
   };
 
   #handleAddToWatchClick = () => {
-    this.#handleDataChange({...this.#film, isAddedToWatch: !this.#film.userDetails.watchlist});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isAddedToWatch: !this.#film.userDetails.watchlist}
+    );
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#film, isFavorite: !this.#film.userDetails.favorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, isFavorite: !this.#film.userDetails.favorite}
+    );
   };
 
   #handlePopupCloseButtonClick = (film) => {
-    this.#handleDataChange(film);
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      film
+    );
     this.#replacePopupToCard();
   };
 }
