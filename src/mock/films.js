@@ -24,7 +24,7 @@ const mockFilms = [
         'Morgan Freeman'
       ],
       'release': {
-        'date': '2019-05-11T00:00:00.000Z',
+        'date': new Date('2014-01-01'),
         'releaseCountry': 'Finland'
       },
       'duration': 77,
@@ -59,7 +59,7 @@ const mockFilms = [
         'Amie Donald'
       ],
       'release': {
-        'date': '2023-05-11T00:00:00.000Z',
+        'date': new Date('2012-01-01'),
         'releaseCountry': 'USA'
       },
       'duration': 177,
@@ -94,7 +94,7 @@ const mockFilms = [
         'Ralph Fiennes'
       ],
       'release': {
-        'date': '2022-01-11T00:00:00.000Z',
+        'date': new Date('2011-01-01'),
         'releaseCountry': 'UK'
       },
       'duration': 107,
@@ -129,7 +129,7 @@ const mockFilms = [
         'Anime character'
       ],
       'release': {
-        'date': '2023-03-03T00:00:00.000Z',
+        'date': new Date('2010-01-01'),
         'releaseCountry': 'Japan'
       },
       'duration': 57,
