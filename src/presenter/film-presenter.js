@@ -47,6 +47,10 @@ export default class FilmPresenter {
       film,
       comments: film.comments.map((commentId) => this.#comments[commentId]),
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
+      onAddToWatchClick: this.#handleAddToWatchClick,
+      onAlreadyWatchedClick: this.#handleAlreadyWatchedClick,
+      onFavoriteClick: this.#handleFavoriteClick,
+      onDeleteClick: this.#handleDeleteClick,
     });
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -60,10 +64,11 @@ export default class FilmPresenter {
 
     if (this.#mode === Mode.POPUP) {
       replace(this.#popupComponent, prevPopupComponent);
+      return;
     }
 
-    // remove(prevFilmComponent);
-    // remove(prevPopupComponent);
+    remove(prevFilmComponent);
+    remove(prevPopupComponent);
   }
 
   destroy() {
@@ -108,32 +113,51 @@ export default class FilmPresenter {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      {...this.#film, isAlreadyWatched: !this.#film.userDetails.alreadyWatched}
-    );
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          alreadyWatched: !this.#film.userDetails.alreadyWatched,
+        }
+      });
   };
 
   #handleAddToWatchClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      {...this.#film, isAddedToWatch: !this.#film.userDetails.watchlist}
-    );
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          watchlist: !this.#film.userDetails.watchlist,
+        }
+      });
   };
 
   #handleFavoriteClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
-      {...this.#film, isFavorite: !this.#film.userDetails.favorite}
-    );
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          favorite: !this.#film.userDetails.favorite,
+        }
+      });
   };
 
-  #handlePopupCloseButtonClick = (film) => {
-    this.#handleDataChange(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      film
-    );
+  #handlePopupCloseButtonClick = () => {
     this.#replacePopupToCard();
+    this.#handleDataChange();
+  };
+
+  #handleDeleteClick = (commentId) => {
+    this.#handleDataChange(
+      UserAction.DELETE_COMMENT,
+      UpdateType.MINOR,
+      commentId,
+    );
   };
 }

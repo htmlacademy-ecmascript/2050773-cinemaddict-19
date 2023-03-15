@@ -1,6 +1,5 @@
 import { RenderPosition, render, remove } from '../framework/render.js';
 import BoardView from '../ view/board-view.js';
-import FilterView from '../ view/filter-view.js';
 import SortView from '../ view/sort-view.js';
 import FilmsListView from '../ view/films-list-view.js';
 import FilmsListContainerView from '../ view/films-list-container-view';
@@ -25,6 +24,9 @@ export default class BoardPresenter {
   #showMoreButtonComponent = null;
 
   #filmPresenter = new Map();
+  #filmsTopRatedPresenter = new Map();
+  #filmsMostCommentedPresenter = new Map();
+
   #currentSortType = SortType.DEFAULT;
 
   #listComponent = new FilmsListView();
@@ -63,7 +65,6 @@ export default class BoardPresenter {
 
   init() {
     this.#renderBoard();
-    render(new FilterView(), this.#boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   #handleShowMoreButtonClick = () => {
@@ -81,9 +82,13 @@ export default class BoardPresenter {
 
   #handleModeChange = () => {
     this.#filmPresenter.forEach((presenter) => presenter.resetView());
+    this.#filmsTopRatedPresenter.forEach((presenter) => presenter.resetView());
+    this.#filmsMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleViewAction = (actionType, updateType, update) => {
+    // console.log(actionType, updateType, update); для проверки входящих данных
+
     switch (actionType) {
       case UserAction.UPDATE_FILM:
         this.#filmsModel.updateFilm(updateType, update);
@@ -99,8 +104,16 @@ export default class BoardPresenter {
 
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
-      case updateType.PATCH:
-        this.#filmPresenter.get(data.id).init(data);
+      case UpdateType.PATCH:
+        if (this.#filmPresenter.get(data.id)) {
+          this.#filmPresenter.get(data.id).init(data, this.comments);
+        }
+        if (this.#filmsTopRatedPresenter.get(data.id)){
+          this.#filmsTopRatedPresenter.get(data.id).init(data, this.comments);
+        }
+        if (this.#filmsMostCommentedPresenter.get(data.id)){
+          this.#filmsMostCommentedPresenter.get(data.id).init(data, this.comments);
+        }
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
@@ -180,7 +193,7 @@ export default class BoardPresenter {
       });
 
       filmExtraPresenter.init(topRatedFilm, comments);
-      this.#filmPresenter.set(topRatedFilm.id, filmExtraPresenter);
+      this.#filmsTopRatedPresenter.set(topRatedFilm.id, filmExtraPresenter);
     }
   }
 
@@ -203,7 +216,7 @@ export default class BoardPresenter {
       });
 
       filmExtraPresenter.init(mostCommentedFilm, comments);
-      this.#filmPresenter.set(mostCommentedFilm.id, filmExtraPresenter);
+      this.#filmsMostCommentedPresenter.set(mostCommentedFilm.id, filmExtraPresenter);
     }
   }
 
@@ -213,7 +226,12 @@ export default class BoardPresenter {
     // console.log(this.#filmPresenter);  Проблема: не все фильмы попадают в #filmPresenter, потому что у некоторых фильмов одинаковые айди, из-за чего не все из них удаляются методом destroy()
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmsTopRatedPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmsMostCommentedPresenter.forEach((presenter) => presenter.destroy());
+
     this.#filmPresenter.clear();
+    this.#filmsTopRatedPresenter.clear();
+    this.#filmsMostCommentedPresenter.clear();
 
     remove(this.#sortComponent);
     remove(this.#showMoreButtonComponent);
@@ -253,7 +271,7 @@ export default class BoardPresenter {
       this.#renderShowMoreButton();
     }
 
-    // this.#renderTopRatedFilms(this.films, this.comments); В каком месте кода их лучше отрендерить, чтобы они не перерисовывались при каждом минорном обновлении?
+    // this.#renderTopRatedFilms(this.films, this.comments);
     // this.#renderMostCommentedFilms(this.films, this.comments);
   }
 }

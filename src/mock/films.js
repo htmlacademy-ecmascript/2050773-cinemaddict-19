@@ -147,6 +147,9 @@ const mockFilms = [
   }
 ];
 
-const getRandomFilm = () => getRandomArrayElement(mockFilms);
+const getRandomFilm = () => {
+  const randomFilm = getRandomArrayElement(mockFilms);
+  return randomFilm;
+};
 
 export { getRandomFilm };

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { FilterType } from './const';
 
 const FILMS_EXTRA_COUNT = 2;
 
@@ -36,4 +37,10 @@ function sortByRating(filmA, filmB) {
   return weight ?? filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
 }
 
-export {getRandomArrayElement, getTopRatedFilms, getMostCommentedFilms, sortByDate, sortByRating};
+const filter = {
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.Favorite),
+};
+
+export {getRandomArrayElement, getTopRatedFilms, getMostCommentedFilms, sortByDate, sortByRating, filter};

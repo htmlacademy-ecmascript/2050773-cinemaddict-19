@@ -1,5 +1,6 @@
 import Observable from '../framework/observable.js';
 import { getRandomFilm } from '../mock/films.js';
+import { nanoid } from 'nanoid';
 
 const FILMS_COUNT = 16;
 
@@ -7,6 +8,9 @@ export default class FilmsModel extends Observable {
   #films = Array.from({length: FILMS_COUNT}, getRandomFilm);
 
   get films() {
+    for (const film of this.#films) {
+      film.id = nanoid();
+    }
     return this.#films;
   }
 

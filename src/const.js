@@ -1,9 +1,10 @@
 const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];
 
 const FilterType = {
+  ALL: 'All movies',
   WATCHLIST: 'Watchlist',
-  HISTORY: 'history',
-  FAVORITES: 'favorites',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites',
 };
 
 const SortType = {
