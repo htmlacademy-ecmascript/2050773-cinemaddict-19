@@ -24,7 +24,7 @@ const filterModel = new FilterModel();
 const boardPresenter = new BoardPresenter({
   boardContainer: mainElement,
   bodyElement: bodyElement,
-  filmsModel, commentsModel
+  filmsModel, commentsModel, filterModel
 });
 
 const filterPresenter = new FilterPresenter({

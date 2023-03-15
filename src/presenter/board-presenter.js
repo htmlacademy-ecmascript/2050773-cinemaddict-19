@@ -1,4 +1,3 @@
-import { RenderPosition, render, remove } from '../framework/render.js';
 import BoardView from '../ view/board-view.js';
 import SortView from '../ view/sort-view.js';
 import FilmsListView from '../ view/films-list-view.js';
@@ -6,9 +5,10 @@ import FilmsListContainerView from '../ view/films-list-container-view';
 import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import FilmPresenter from './film-presenter.js';
-import { getTopRatedFilms, getMostCommentedFilms } from '../utils.js';
-import { sortByRating, sortByDate } from '../utils.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { getTopRatedFilms, getMostCommentedFilms, sortByRating, sortByDate, filter } from '../utils.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
+import { RenderPosition, render, remove } from '../framework/render.js';
+
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -17,6 +17,7 @@ export default class BoardPresenter {
   #bodyElement = null;
   #filmsModel = null;
   #commentsModel = null;
+  #filterModel = null;
 
   #boardComponent = new BoardView();
 
@@ -28,6 +29,7 @@ export default class BoardPresenter {
   #filmsMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
+  #filterType = FilterType.WATCHLIST;
 
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
@@ -35,28 +37,34 @@ export default class BoardPresenter {
   #listMostCommentedContainerComponent = new FilmsListContainerView(true, 'most-commented');
 
   #sortComponent = null;
-  #noFilmsComponent = new NoFilmView();
+  #noFilmsComponent = null;
 
-  constructor({boardContainer, bodyElement, filmsModel, commentsModel}) {
+  constructor({boardContainer, bodyElement, filmsModel, commentsModel, filterModel}) {
     this.#boardContainer = boardContainer;
     this.#bodyElement = bodyElement;
 
     this.#filmsModel = filmsModel;
     this.#commentsModel = commentsModel;
+    this.#filterModel = filterModel;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#commentsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get films() {
+    this.#filterType = this.#filterModel.filter;
+    const films = this.#filmsModel.films;
+    const filteredFilms = filter[this.#filterType](films);
+
     switch (this.#currentSortType) {
       case SortType.DATE:
-        return [...this.#filmsModel.films].sort(sortByDate);
+        return filteredFilms.sort(sortByDate);
       case SortType.RATING:
-        return [...this.#filmsModel.films].sort(sortByRating);
+        return filteredFilms.sort(sortByRating);
     }
 
-    return this.#filmsModel.films;
+    return filteredFilms;
   }
 
   get comments() {
@@ -146,6 +154,10 @@ export default class BoardPresenter {
   }
 
   #renderNoFilms() {
+    this.#noFilmsComponent = new NoFilmView({
+      filterType: this.#filterType
+    });
+
     render(this.#noFilmsComponent, this.#boardComponent.element);
   }
 
@@ -153,6 +165,7 @@ export default class BoardPresenter {
     this.#showMoreButtonComponent = new ShowMoreButtonView( {
       onClick: this.#handleShowMoreButtonClick
     });
+
     render(this.#showMoreButtonComponent, this.#listComponent.element);
   }
 
