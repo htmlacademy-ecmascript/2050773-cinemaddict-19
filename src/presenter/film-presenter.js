@@ -51,6 +51,7 @@ export default class FilmPresenter {
       onAlreadyWatchedClick: this.#handleAlreadyWatchedClick,
       onFavoriteClick: this.#handleFavoriteClick,
       onDeleteClick: this.#handleDeleteClick,
+      onCommentAdd: this.#handleCommentAdd,
     });
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -158,6 +159,14 @@ export default class FilmPresenter {
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       commentId,
+    );
+  };
+
+  #handleCommentAdd = (commentToAdd) => {
+    this.#handleDataChange(
+      UserAction.ADD_COMMENT,
+      UpdateType.MINOR,
+      commentToAdd,
     );
   };
 }

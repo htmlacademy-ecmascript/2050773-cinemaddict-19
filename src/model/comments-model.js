@@ -25,6 +25,7 @@ export default class CommentsModel extends Observable {
   }
 
   addComment(updateType, update) {
+    // console.log(updateType, update);
     this.#comments = [
       update,
       ...this.#comments,
