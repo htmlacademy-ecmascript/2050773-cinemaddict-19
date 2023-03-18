@@ -6,6 +6,10 @@ import FilmsModel from './model/films-model.js';
 import CommentsModel from './model/comments-model.js';
 import FilterModel from './model/filter-model.js';
 import { RenderPosition, render } from './framework/render.js';
+import FilmsApiService from './films-api-service.js';
+
+const AUTHORIZATION = 'Basic 666hfS44wcl1666j';
+const END_POINT = 'https://19.ecmascript.pages.academy/cinemaddict';
 
 const MOCK_FILMS_AMOUNT = 666;
 
@@ -17,7 +21,10 @@ const footerElement = document.querySelector('footer');
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
 render(new StatisticsView(MOCK_FILMS_AMOUNT), footerElement, RenderPosition.BEFOREEND);
 
-const filmsModel = new FilmsModel();
+const filmsModel = new FilmsModel({
+  filmsApiService: new FilmsApiService(END_POINT, AUTHORIZATION)
+});
+
 const commentsModel = new CommentsModel();
 const filterModel = new FilterModel();
 
