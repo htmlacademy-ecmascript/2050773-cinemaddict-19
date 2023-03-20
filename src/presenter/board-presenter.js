@@ -4,6 +4,7 @@ import FilmsListView from '../ view/films-list-view.js';
 import FilmsListContainerView from '../ view/films-list-container-view';
 import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
+import LoadingView from '../ view/loading-view.js';
 import FilmPresenter from './film-presenter.js';
 import { getTopRatedFilms, getMostCommentedFilms, sortByRating, sortByDate, filter } from '../utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
@@ -23,6 +24,7 @@ export default class BoardPresenter {
 
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #showMoreButtonComponent = null;
+  #loadingComponent = new LoadingView();
 
   #filmPresenter = new Map();
   #filmsTopRatedPresenter = new Map();
@@ -30,6 +32,7 @@ export default class BoardPresenter {
 
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.WATCHLIST;
+  #isLoading = true;
 
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
@@ -131,6 +134,11 @@ export default class BoardPresenter {
         this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.#renderBoard();
         break;
+      case updateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderBoard();
+        break;
     }
   };
 
@@ -151,6 +159,10 @@ export default class BoardPresenter {
     });
 
     render(this.#sortComponent, this.#boardContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderLoading() {
+    render(this.#loadingComponent, this.#boardComponent.element, RenderPosition.AFTERBEGIN);
   }
 
   #renderNoFilms() {
@@ -247,6 +259,7 @@ export default class BoardPresenter {
     this.#filmsMostCommentedPresenter.clear();
 
     remove(this.#sortComponent);
+    remove(this.#loadingComponent);
     remove(this.#showMoreButtonComponent);
 
     if (this.#noFilmsComponent) {
@@ -266,6 +279,11 @@ export default class BoardPresenter {
 
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
+
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
 
     const films = this.films;
     const filmCount = films.length;

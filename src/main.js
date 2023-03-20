@@ -7,6 +7,7 @@ import CommentsModel from './model/comments-model.js';
 import FilterModel from './model/filter-model.js';
 import { RenderPosition, render } from './framework/render.js';
 import FilmsApiService from './films-api-service.js';
+import CommentsApiService from './comments-api-service.js';
 
 const AUTHORIZATION = 'Basic 666hfS44wcl1666j';
 const END_POINT = 'https://19.ecmascript.pages.academy/cinemaddict';
@@ -25,7 +26,10 @@ const filmsModel = new FilmsModel({
   filmsApiService: new FilmsApiService(END_POINT, AUTHORIZATION)
 });
 
-const commentsModel = new CommentsModel();
+const commentsModel = new CommentsModel({
+  commentsApiService: new CommentsApiService(END_POINT, AUTHORIZATION)
+});
+
 const filterModel = new FilterModel();
 
 const boardPresenter = new BoardPresenter({
@@ -42,3 +46,4 @@ const filterPresenter = new FilterPresenter({
 
 boardPresenter.init();
 filterPresenter.init();
+filmsModel.init();
