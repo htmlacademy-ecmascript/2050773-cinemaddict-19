@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const {type, name, count} = filter;
-  return `<a href="#${type}" class="main-navigation__item ${type === currentFilterType ? 'main-navigation__item--active' : ''}">${name}
+  return `<a href="#${type}" class="main-navigation__item ${type === currentFilterType ? 'main-navigation__item--active' : ''}" data-filter-type="${type}">${name}
   ${name === 'All movies' ? '' : `<span class="main-navigation__item-count">${count}</span>`}
           </a>`;
 };
@@ -26,7 +26,7 @@ export default class FilterView extends AbstractView {
     this.#currentFilter = currentFilterType;
     this.#handleFilterTypeChange = onFilterTypeChange;
 
-    this.element.addEventListener('change', this.#filterTypeChangeHandler);
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
   }
 
   get template() {
@@ -35,6 +35,8 @@ export default class FilterView extends AbstractView {
 
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFilterTypeChange(evt.target.value);
+    if (evt.target.dataset.filterType) {
+      this.#handleFilterTypeChange(evt.target.dataset.filterType);
+    }
   };
 }

@@ -12,15 +12,12 @@ import CommentsApiService from './comments-api-service.js';
 const AUTHORIZATION = 'Basic 666hfS44wcl1666j';
 const END_POINT = 'https://19.ecmascript.pages.academy/cinemaddict';
 
-const MOCK_FILMS_AMOUNT = 666;
-
 const mainElement = document.querySelector('.main');
 const bodyElement = document.querySelector('body');
 const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('footer');
 
 render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
-render(new StatisticsView(MOCK_FILMS_AMOUNT), footerElement, RenderPosition.BEFOREEND);
 
 const filmsModel = new FilmsModel({
   filmsApiService: new FilmsApiService(END_POINT, AUTHORIZATION)
@@ -44,6 +41,9 @@ const filterPresenter = new FilterPresenter({
   filmsModel
 });
 
+
 boardPresenter.init();
 filterPresenter.init();
 filmsModel.init();
+
+render(new StatisticsView({filmsModel}), footerElement, RenderPosition.BEFOREEND);

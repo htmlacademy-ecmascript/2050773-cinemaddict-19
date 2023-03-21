@@ -6,11 +6,13 @@ const createBoardTemplate = (filmsAmount) =>
     </section>`;
 
 export default class StatisticsView extends AbstractView {
+  #filmsModel = null;
   #filmsAmount = null;
 
-  constructor(filmsAmount) {
+  constructor({filmsModel}) {
     super();
-    this.#filmsAmount = filmsAmount;
+    this.#filmsModel = filmsModel;
+    this.#filmsAmount = this.#filmsModel.films.length;
   }
 
   get template() {

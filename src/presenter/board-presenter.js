@@ -31,7 +31,7 @@ export default class BoardPresenter {
   #filmsMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
-  #filterType = FilterType.WATCHLIST;
+  #filterType = FilterType.ALL;
   #isLoading = true;
 
   #listComponent = new FilmsListView();
@@ -70,10 +70,6 @@ export default class BoardPresenter {
     return filteredFilms;
   }
 
-  // get comments() {
-  //   return this.#commentsModel.comments;
-  // }
-
   init() {
     this.#renderBoard();
   }
@@ -98,7 +94,6 @@ export default class BoardPresenter {
   };
 
   #handleViewAction = (actionType, updateType, update) => {
-    // console.log(actionType, updateType, update); для проверки входящих данных
 
     switch (actionType) {
       case UserAction.UPDATE_FILM:
@@ -114,26 +109,30 @@ export default class BoardPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
+
     switch (updateType) {
       case UpdateType.PATCH:
         if (this.#filmPresenter.get(data.id)) {
-          this.#filmPresenter.get(data.id).init(data, this.comments);
+          this.#filmPresenter.get(data.id).init(data, this.#commentsModel);
         }
         if (this.#filmsTopRatedPresenter.get(data.id)){
-          this.#filmsTopRatedPresenter.get(data.id).init(data, this.comments);
+          this.#filmsTopRatedPresenter.get(data.id).init(data, this.#commentsModel);
         }
         if (this.#filmsMostCommentedPresenter.get(data.id)){
-          this.#filmsMostCommentedPresenter.get(data.id).init(data, this.comments);
+          this.#filmsMostCommentedPresenter.get(data.id).init(data, this.#commentsModel);
         }
         break;
+
       case UpdateType.MINOR:
         this.#clearBoard();
         this.#renderBoard();
         break;
+
       case UpdateType.MAJOR:
         this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.#renderBoard();
         break;
+
       case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
@@ -199,7 +198,7 @@ export default class BoardPresenter {
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
-  #renderTopRatedFilms(films, comments) {
+  #renderTopRatedFilms(films) {
     const filmsExtraComponent = new FilmsListView(true, 'Top rated');
 
     render(filmsExtraComponent, this.#boardComponent.element);
@@ -217,12 +216,12 @@ export default class BoardPresenter {
         onModeChange: this.#handleModeChange
       });
 
-      filmExtraPresenter.init(topRatedFilm, comments);
+      filmExtraPresenter.init(topRatedFilm, this.#commentsModel);
       this.#filmsTopRatedPresenter.set(topRatedFilm.id, filmExtraPresenter);
     }
   }
 
-  #renderMostCommentedFilms(films, comments) {
+  #renderMostCommentedFilms(films) {
     const filmsExtraComponent = new FilmsListView(true, 'Most commented');
 
     render(filmsExtraComponent, this.#boardComponent.element);
@@ -240,15 +239,13 @@ export default class BoardPresenter {
         onModeChange: this.#handleModeChange
       });
 
-      filmExtraPresenter.init(mostCommentedFilm, comments);
+      filmExtraPresenter.init(mostCommentedFilm, this.#commentsModel);
       this.#filmsMostCommentedPresenter.set(mostCommentedFilm.id, filmExtraPresenter);
     }
   }
 
   #clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
     const filmCount = this.films.length;
-
-    // console.log(this.#filmPresenter);  Проблема: не все фильмы попадают в #filmPresenter, потому что у некоторых фильмов одинаковые айди, из-за чего не все из них удаляются методом destroy()
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmsTopRatedPresenter.forEach((presenter) => presenter.destroy());

@@ -11,7 +11,6 @@ export default class FilmsModel extends Observable {
   }
 
   get films() {
-    console.log(this.#films);
     return this.#films;
   }
 
