@@ -28,9 +28,12 @@ export default class FilmPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  init(film, comments) {
+  async init(film, comments) {
     this.#film = film;
     this.#comments = comments;
+
+    const commentsForFilm = await this.#comments.getComments(this.#film.id);
+
 
     const prevFilmComponent = this.#filmComponent;
     const prevPopupComponent = this.#popupComponent;
@@ -45,7 +48,8 @@ export default class FilmPresenter {
 
     this.#popupComponent = new PopupView({
       film,
-      comments: film.comments.map((commentId) => this.#comments[commentId]),
+      // comments: film.comments.map((commentId) => this.#comments[commentId]),
+      comments: [...commentsForFilm],
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
       onAddToWatchClick: this.#handleAddToWatchClick,
       onAlreadyWatchedClick: this.#handleAlreadyWatchedClick,

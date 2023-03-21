@@ -70,9 +70,9 @@ export default class BoardPresenter {
     return filteredFilms;
   }
 
-  get comments() {
-    return this.#commentsModel.comments;
-  }
+  // get comments() {
+  //   return this.#commentsModel.comments;
+  // }
 
   init() {
     this.#renderBoard();
@@ -134,7 +134,7 @@ export default class BoardPresenter {
         this.#clearBoard({resetRenderedFilmCount: true, resetSortType: true});
         this.#renderBoard();
         break;
-      case updateType.INIT:
+      case UpdateType.INIT:
         this.#isLoading = false;
         remove(this.#loadingComponent);
         this.#renderBoard();
@@ -195,7 +195,7 @@ export default class BoardPresenter {
       onModeChange: this.#handleModeChange
     });
 
-    filmPresenter.init(film, this.comments);
+    filmPresenter.init(film, this.#commentsModel);
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
