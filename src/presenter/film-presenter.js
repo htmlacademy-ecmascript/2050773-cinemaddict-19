@@ -122,7 +122,7 @@ export default class FilmPresenter {
         ...this.#film,
         userDetails: {
           ...this.#film.userDetails,
-          alreadyWatched: !this.#film.userDetails.alreadyWatched,
+          watched: !this.#film.userDetails.watched,
         }
       });
   };

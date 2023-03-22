@@ -6,7 +6,7 @@ const createFilmCardTemplate = (film) => {
 
   const favoriteClassName = userDetails.favorite ? 'film-card__controls-item--active' : '';
   const watchlistClassName = userDetails.watchlist ? 'film-card__controls-item--active' : '';
-  const watchedClassName = userDetails.alreadyWatched ? 'film-card__controls-item--active' : '';
+  const watchedClassName = userDetails.watched ? 'film-card__controls-item--active' : '';
 
   return `<article class="film-card">
     <a class="film-card__link">

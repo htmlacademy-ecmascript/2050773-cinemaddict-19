@@ -36,6 +36,7 @@ export default class FilmsModel extends Observable {
     try {
       const response = await this.#filmsApiService.updateFilm(update);
       const updatedFilm = this.#adaptToClient(response);
+      console.log(updatedFilm);
       this.#films = [
         ...this.#films.slice(0, index),
         updatedFilm,
@@ -62,7 +63,7 @@ export default class FilmsModel extends Observable {
       },
       userDetails: {
         ...film['user_details'],
-        alreadyWatched: film['user_details']['already_watched'],
+        watched: film['user_details']['already_watched'],
         watchingDate: film['user_details']['watching_date']
       }
     };
