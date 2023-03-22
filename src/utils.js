@@ -7,9 +7,13 @@ function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
-const getTopRatedFilms = (films) => Array.from(films.values()).sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating).slice(0, FILMS_EXTRA_COUNT);
+const getTopRatedFilms = (films) => Array.from(films.values())
+  .sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating)
+  .slice(0, FILMS_EXTRA_COUNT);
 
-const getMostCommentedFilms = (films) => Array.from(films.values()).sort((a, b) => b.comments.length - a.comments.length).slice(0, FILMS_EXTRA_COUNT);
+const getMostCommentedFilms = (films) => Array.from(films.values())
+  .sort((a, b) => b.comments.length - a.comments.length)
+  .slice(0, FILMS_EXTRA_COUNT);
 
 function getWeightForNullData(dataA, dataB) {
   if (dataA === null && dataB === null) {
