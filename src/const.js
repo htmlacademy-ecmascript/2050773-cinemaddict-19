@@ -1,7 +1,10 @@
+const EMOJIS = ['smile', 'sleeping', 'puke', 'angry'];
+
 const FilterType = {
+  ALL: 'All movies',
   WATCHLIST: 'Watchlist',
-  HISTORY: 'history',
-  FAVORITES: 'favorites',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites',
 };
 
 const SortType = {
@@ -10,4 +13,17 @@ const SortType = {
   RATING: 'rating',
 };
 
-export { FilterType, SortType };
+const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT',
+};
+
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+  INIT: 'INIT',
+};
+
+export { FilterType, SortType, EMOJIS, UserAction, UpdateType };

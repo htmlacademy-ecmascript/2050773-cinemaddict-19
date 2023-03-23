@@ -1,6 +1,7 @@
 import { replace, render, remove } from '../framework/render.js';
 import FilmCardView from '../ view/film-card-view.js';
 import PopupView from '../ view/popup-view.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -27,9 +28,12 @@ export default class FilmPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  init(film, comments) {
+  async init(film, comments) {
     this.#film = film;
     this.#comments = comments;
+
+    const commentsForFilm = await this.#comments.getComments(this.#film.id);
+    // console.log(commentsForFilm[0].id);
 
     const prevFilmComponent = this.#filmComponent;
     const prevPopupComponent = this.#popupComponent;
@@ -44,8 +48,14 @@ export default class FilmPresenter {
 
     this.#popupComponent = new PopupView({
       film,
-      comments: film.comments.map((commentId) => this.#comments[commentId]),
+      // comments: film.comments.map((commentId) => this.#comments[commentId]),
+      comments: [...commentsForFilm],
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
+      onAddToWatchClick: this.#handleAddToWatchClick,
+      onAlreadyWatchedClick: this.#handleAlreadyWatchedClick,
+      onFavoriteClick: this.#handleFavoriteClick,
+      onDeleteClick: this.#handleDeleteClick,
+      onCommentAdd: this.#handleCommentAdd,
     });
 
     if (prevFilmComponent === null || prevPopupComponent === null) {
@@ -59,10 +69,11 @@ export default class FilmPresenter {
 
     if (this.#mode === Mode.POPUP) {
       replace(this.#popupComponent, prevPopupComponent);
+      return;
     }
 
-    // remove(prevFilmComponent);
-    // remove(prevPopupComponent);
+    remove(prevFilmComponent);
+    remove(prevPopupComponent);
   }
 
   destroy() {
@@ -72,6 +83,7 @@ export default class FilmPresenter {
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#popupComponent.reset(this.#film);
       this.#replacePopupToCard();
     }
   }
@@ -79,6 +91,7 @@ export default class FilmPresenter {
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#popupComponent.reset(this.#film);
       this.#replacePopupToCard();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
@@ -102,19 +115,68 @@ export default class FilmPresenter {
   };
 
   #handleAlreadyWatchedClick = () => {
-    this.#handleDataChange({...this.#film, isAlreadyWatched: !this.#film.userDetails.alreadyWatched});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          watched: !this.#film.userDetails.watched,
+        }
+      });
   };
 
   #handleAddToWatchClick = () => {
-    this.#handleDataChange({...this.#film, isAddedToWatch: !this.#film.userDetails.watchlist});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          watchlist: !this.#film.userDetails.watchlist,
+        }
+      });
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#film, isFavorite: !this.#film.userDetails.favorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
+      {
+        ...this.#film,
+        userDetails: {
+          ...this.#film.userDetails,
+          favorite: !this.#film.userDetails.favorite,
+        }
+      });
   };
 
-  #handlePopupCloseButtonClick = (film) => {
-    this.#handleDataChange(film);
+  #handlePopupCloseButtonClick = () => {
     this.#replacePopupToCard();
+    this.#handleDataChange();
+  };
+
+  #handleDeleteClick = (commentId) => {
+    this.#handleDataChange(
+      UserAction.DELETE_COMMENT,
+      UpdateType.MINOR,
+      commentId,
+    );
+  };
+
+  #handleCommentAdd = (comment) => {
+    const film = this.#film;
+    // console.log(comment);
+
+    this.#handleDataChange(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      {
+        comment,
+        film
+      },
+    );
   };
 }

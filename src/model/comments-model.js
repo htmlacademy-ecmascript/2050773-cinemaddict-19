@@ -1,13 +1,45 @@
-import { mockComments } from '../mock/comments.js';
+import Observable from '../framework/observable.js';
 
-export default class CommentsModel {
-  #comments = [];
+export default class CommentsModel extends Observable {
+  #commentsApiService = null;
+  #comments = null;
 
-  constructor() {
-    this.#comments = mockComments;
+  constructor({commentsApiService}) {
+    super();
+    this.#commentsApiService = commentsApiService;
   }
 
-  get comments() {
+  async getComments(id) {
+    try {
+      this.#comments = await this.#commentsApiService.getComments(id);
+    } catch(err) {
+      this.#comments = [];
+    }
     return this.#comments;
+  }
+
+  async addComment(updateType, update) {
+    // console.log(update.film.id, update.comment.comment); аргументы верные, но комментарий не добавляется
+    try {
+      const newComment = await this.#commentsApiService.addComment(update.film.id, update.comment.comment);
+      const film = {
+        ...update.film,
+        comments: newComment.movie.comments,
+      };
+      this._notify(updateType, film);
+    } catch(err) {
+      throw new Error('Can\'t add comment');
+    }
+  }
+
+  deleteComment(updateType, update) {
+    return this.#commentsApiService.deleteComment(update.commentId)
+      .then(() => {
+        const film = {
+          ...update.film,
+          comments: update.film.comments.filter((comment) => comment !== update.commentId),
+        };
+        this._notify(updateType, film);
+      });
   }
 }

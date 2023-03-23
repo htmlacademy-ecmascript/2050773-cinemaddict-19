@@ -1,16 +1,44 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterTemplate = () =>
-  `<nav class="main-navigation">
-    <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-    <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">13</span></a>
-    <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">4</span></a>
-    <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">8</span></a>
-  </nav>`;
+const createFilterItemTemplate = (filter, currentFilterType) => {
+  const {type, name, count} = filter;
+  // console.log(filter);
 
-export default class FilterVie extends AbstractView {
+  return `<a href="#${type}" class="main-navigation__item ${type === currentFilterType ? 'main-navigation__item--active' : ''}" data-filter-type="${type}">${name}
+  ${name === 'All movies' ? '' : `<span class="main-navigation__item-count">${count}</span>`}
+          </a>`;
+};
+
+const createFilterTemplate = (filterItems, currentFilterType) => {
+  const filterItemsTemplate = filterItems.map((filter) => createFilterItemTemplate(filter, currentFilterType)).join('');
+
+  return ` <nav class="main-navigation">
+              ${filterItemsTemplate}
+          </nav>`;
+};
+
+export default class FilterView extends AbstractView {
+  #filters = null;
+  #currentFilter = null;
+  #handleFilterTypeChange = null;
+
+  constructor({filters, currentFilterType, onFilterTypeChange}) {
+    super();
+    this.#filters = filters;
+    this.#currentFilter = currentFilterType;
+    this.#handleFilterTypeChange = onFilterTypeChange;
+
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
+  }
 
   get template() {
-    return createFilterTemplate;
+    return createFilterTemplate(this.#filters, this.#currentFilter);
   }
+
+  #filterTypeChangeHandler = (evt) => {
+    evt.preventDefault();
+    if (evt.target.dataset.filterType) {
+      this.#handleFilterTypeChange(evt.target.dataset.filterType);
+    }
+  };
 }
