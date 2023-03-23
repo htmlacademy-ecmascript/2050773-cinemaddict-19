@@ -13,6 +13,8 @@ export default class CommentsApiService extends ApiService {
   }
 
   async addComment(id, comment) {
+    // console.log(addComment) приходят верные аргументы, но дальше код не выполняется
+
     const response = await this._load({
       url: `comments/${id}`,
       method: Method.POST,
@@ -21,11 +23,11 @@ export default class CommentsApiService extends ApiService {
     });
 
     const parsedResponse = await ApiService.parseResponse(response);
-
     return parsedResponse;
   }
 
   async deleteComment(id) {
+    // console.log(id); undefined
     const response = await this._load({
       url: `comments/${id}`,
       method: Method.DELETE,

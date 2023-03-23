@@ -33,7 +33,7 @@ export default class FilmPresenter {
     this.#comments = comments;
 
     const commentsForFilm = await this.#comments.getComments(this.#film.id);
-
+    // console.log(commentsForFilm[0].id);
 
     const prevFilmComponent = this.#filmComponent;
     const prevPopupComponent = this.#popupComponent;
@@ -117,7 +117,7 @@ export default class FilmPresenter {
   #handleAlreadyWatchedClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#film,
         userDetails: {
@@ -130,7 +130,7 @@ export default class FilmPresenter {
   #handleAddToWatchClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#film,
         userDetails: {
@@ -143,7 +143,7 @@ export default class FilmPresenter {
   #handleFavoriteClick = () => {
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       {
         ...this.#film,
         userDetails: {
@@ -166,11 +166,17 @@ export default class FilmPresenter {
     );
   };
 
-  #handleCommentAdd = (commentToAdd) => {
+  #handleCommentAdd = (comment) => {
+    const film = this.#film;
+    // console.log(comment);
+
     this.#handleDataChange(
       UserAction.ADD_COMMENT,
-      UpdateType.MINOR,
-      commentToAdd,
+      UpdateType.PATCH,
+      {
+        comment,
+        film
+      },
     );
   };
 }

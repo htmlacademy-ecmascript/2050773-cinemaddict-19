@@ -245,7 +245,6 @@ export default class BoardPresenter {
   }
 
   #clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
-    const filmCount = this.films.length;
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmsTopRatedPresenter.forEach((presenter) => presenter.destroy());
@@ -266,7 +265,7 @@ export default class BoardPresenter {
     if (resetRenderedFilmCount) {
       this.#renderedFilmCount = FILM_COUNT_PER_STEP;
     } else {
-      this.#renderedFilmCount = Math.min(filmCount, this.#renderedFilmCount);
+      this.#renderedFilmCount = Math.min(this.films.length, this.#renderedFilmCount);
     }
 
     if (resetSortType) {

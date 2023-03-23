@@ -15,9 +15,9 @@ const createGenreTemplate = (film) => {
 
 const createFilmDetailsTemplate = (userDetails) => {
 
-  const favoriteClassName = userDetails.favorite ? 'film-card__controls-item--active' : '';
-  const watchlistClassName = userDetails.watchlist ? 'film-card__controls-item--active' : '';
-  const watchedClassName = userDetails.alreadyWatched ? 'film-card__controls-item--active' : '';
+  const favoriteClassName = userDetails.favorite ? 'film-details__control-button--active' : '';
+  const watchlistClassName = userDetails.watchlist ? 'film-details__control-button--active' : '';
+  const watchedClassName = userDetails.watched ? 'film-details__control-button--active' : '';
 
   return `<section class="film-details__controls">
   <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
@@ -198,30 +198,39 @@ export default class PopupView extends AbstractStatefulView {
   }
 
   _restoreHandlers() {
-    this.element.querySelector('.film-details__new-comment').addEventListener('change', this.#emojiChangeHandler);
     this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#popupCloseHandler);
+    this.element.querySelector('.film-details__emoji-list').addEventListener('change', this.#emojiChangeHandler);
     this.element.querySelector('.film-details__comment-input').addEventListener('input', this.#commentInputHandler);
     this.element.querySelector('.film-details__comment-input').addEventListener('keydown', this.#addCommentKeydownHandler);
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchlistClickHandler);
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
+    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+    this.element.querySelectorAll('.film-details__comment-delete').forEach((deleteButton) => deleteButton.addEventListener('click', this.#commentDeleteClickHandler));
   }
 
   #watchlistClickHandler = (evt) => {
+    const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
     this.#handleAddToWatchClick();
+    this.element.scroll(0, currentScrollPosition);
   };
 
   #watchedClickHandler = (evt) => {
+    const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
     this.#handleAlreadyWatchedClick();
+    this.element.scroll(0, currentScrollPosition);
   };
 
   #favoriteClickHandler = (evt) => {
+    const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
     this.#handleFavoriteClick();
+    this.element.scroll(0, currentScrollPosition);
   };
 
   #emojiChangeHandler = (evt) => {
     const currentScrollPosition = this.element.scrollTop;
-
     evt.preventDefault();
     this.updateElement({
       emotion: evt.target.value,
@@ -237,6 +246,7 @@ export default class PopupView extends AbstractStatefulView {
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
+    // console.log(evt.target); id есть
     // console.log(evt.target.id); почему не видит id?
     this.#handleDeleteClick(evt.target.id);
   };
@@ -244,8 +254,8 @@ export default class PopupView extends AbstractStatefulView {
   #addCommentKeydownHandler = (evt) => {
     if (evt.code === 'Enter') {
       const commentToAdd = {
-        comment: this._state.userComment,
-        emotion: this._state.checkedEmoji
+        comment: this._state.comment,
+        emotion: this._state.emotion
       };
       this.#handleAddCommentSubmit(commentToAdd);
     }
