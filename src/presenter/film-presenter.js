@@ -171,8 +171,6 @@ export default class FilmPresenter {
 
   #handleCommentAdd = (comment) => {
     const film = this.#film;
-    // console.log(comment);
-
     this.#handleDataChange(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,

@@ -19,7 +19,6 @@ export default class CommentsModel extends Observable {
   }
 
   async addComment(updateType, update) {
-    // console.log(update.film.id, update.comment.comment); аргументы верные, но комментарий не добавляется
     try {
       const newComment = await this.#commentsApiService.addComment(update.film.id, update.comment.comment);
       const film = {

@@ -44,8 +44,8 @@ function sortByRating(filmA, filmB) {
 const filter = {
   [FilterType.ALL]: (films) => films,
   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
-  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
-  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.Favorite),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.watched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite),
 };
 
 export {getRandomArrayElement, getTopRatedFilms, getMostCommentedFilms, sortByDate, sortByRating, filter};

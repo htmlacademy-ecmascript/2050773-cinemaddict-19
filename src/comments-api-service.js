@@ -14,7 +14,6 @@ export default class CommentsApiService extends ApiService {
   }
 
   async addComment(id, comment) {
-    // console.log(addComment) приходят верные аргументы, но дальше код не выполняется
 
     const response = await this._load({
       url: `comments/${id}`,
