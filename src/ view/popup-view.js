@@ -46,7 +46,7 @@ function createCommentsTemplate(comments) {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
             <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>
-            <button class="film-details__comment-delete id="${comment.id}">Delete</button>
+            <button class="film-details__comment-delete" id="${comment.id}">Delete</button>
           </p>
         </div>
       </li>`).join('')}</ul>`;
@@ -246,8 +246,6 @@ export default class PopupView extends AbstractStatefulView {
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    // console.log(evt.target); id есть
-    // console.log(evt.target.id); почему не видит id?
     this.#handleDeleteClick(evt.target.id);
   };
 

@@ -161,8 +161,11 @@ export default class FilmPresenter {
   #handleDeleteClick = (commentId) => {
     this.#handleDataChange(
       UserAction.DELETE_COMMENT,
-      UpdateType.MINOR,
-      commentId,
+      UpdateType.PATCH,
+      {
+        commentId,
+        film: this.#film,
+      }
     );
   };
 
