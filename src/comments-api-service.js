@@ -3,6 +3,7 @@ import ApiService from './framework/api-service.js';
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
   DELETE: 'DELETE'
 };
 
@@ -14,7 +15,6 @@ export default class CommentsApiService extends ApiService {
   }
 
   async addComment(id, comment) {
-
     const response = await this._load({
       url: `comments/${id}`,
       method: Method.POST,

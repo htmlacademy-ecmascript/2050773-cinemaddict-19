@@ -48,7 +48,6 @@ export default class FilmPresenter {
 
     this.#popupComponent = new PopupView({
       film,
-      // comments: film.comments.map((commentId) => this.#comments[commentId]),
       comments: [...commentsForFilm],
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
       onAddToWatchClick: this.#handleAddToWatchClick,
@@ -88,6 +87,39 @@ export default class FilmPresenter {
     }
   }
 
+  setSaving() {
+    this.#popupComponent.updateElement({
+      isDisabled: true,
+    });
+  }
+
+  setDeleting() {
+    this.#popupComponent.updateElement({
+      isDisabled: true,
+      isDeleting: true,
+    });
+  }
+
+
+  setAborting(actionType, commentId) {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#filmComponent.shake();
+      return;
+    }
+
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this.#popupComponent.shakeControls();
+        break;
+      case UserAction.DELETE_COMMENT:
+        this.#popupComponent.shakeComment(commentId);
+        break;
+      case UserAction.ADD_COMMENT:
+        this.#popupComponent.shakeForm();
+        break;
+    }
+  }
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -97,7 +129,12 @@ export default class FilmPresenter {
     }
   };
 
-  #replaceCardToPopup() {
+  async #replaceCardToPopup() {
+    if (!this.#comments.length){
+      const commentsForFilm = await this.#comments.getComments(this.#film.id);
+      this.#popupComponent.setComments(commentsForFilm);
+    }
+
     this.#bodyElement.appendChild(this.#popupComponent.element);
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
@@ -169,13 +206,13 @@ export default class FilmPresenter {
     );
   };
 
-  #handleCommentAdd = (comment) => {
+  #handleCommentAdd = (commentToAdd) => {
     const film = this.#film;
     this.#handleDataChange(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
       {
-        comment,
+        commentToAdd,
         film
       },
     );

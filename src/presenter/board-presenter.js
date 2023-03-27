@@ -10,7 +10,6 @@ import { getTopRatedFilms, getMostCommentedFilms, sortByRating, sortByDate, filt
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { RenderPosition, render, remove } from '../framework/render.js';
 
-
 const FILM_COUNT_PER_STEP = 5;
 
 export default class BoardPresenter {
@@ -100,9 +99,11 @@ export default class BoardPresenter {
         this.#filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
+        this.#filmPresenter.get(update.film.id).setSaving();
         this.#commentsModel.addComment(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
+        this.#filmPresenter.get(update.film.id).setDeleting();
         this.#commentsModel.deleteComment(updateType, update);
         break;
     }
