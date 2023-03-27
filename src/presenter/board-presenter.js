@@ -42,6 +42,7 @@ export default class BoardPresenter {
   #noFilmsComponent = null;
 
   constructor({boardContainer, bodyElement, filmsModel, commentsModel, filterModel}) {
+
     this.#boardContainer = boardContainer;
     this.#bodyElement = bodyElement;
 
@@ -52,6 +53,8 @@ export default class BoardPresenter {
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#commentsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+
+
   }
 
   get films() {
@@ -109,18 +112,19 @@ export default class BoardPresenter {
     }
   };
 
-  #handleModelEvent = (updateType, data) => {
-
+  #handleModelEvent = async (updateType, data) => {
+    let commentsForFilm;
     switch (updateType) {
       case UpdateType.PATCH:
+        commentsForFilm = await this.#commentsModel.getComments(data.id);
         if (this.#filmPresenter.get(data.id)) {
-          this.#filmPresenter.get(data.id).init(data, this.#commentsModel);
+          this.#filmPresenter.get(data.id).init(data, commentsForFilm);
         }
         if (this.#filmsTopRatedPresenter.get(data.id)){
-          this.#filmsTopRatedPresenter.get(data.id).init(data, this.#commentsModel);
+          this.#filmsTopRatedPresenter.get(data.id).init(data, commentsForFilm);
         }
         if (this.#filmsMostCommentedPresenter.get(data.id)){
-          this.#filmsMostCommentedPresenter.get(data.id).init(data, this.#commentsModel);
+          this.#filmsMostCommentedPresenter.get(data.id).init(data, commentsForFilm);
         }
         break;
 
@@ -196,6 +200,7 @@ export default class BoardPresenter {
     });
 
     filmPresenter.init(film, this.#commentsModel);
+
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 

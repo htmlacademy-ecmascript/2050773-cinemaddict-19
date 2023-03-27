@@ -28,11 +28,12 @@ export default class FilmPresenter {
     this.#handleModeChange = onModeChange;
   }
 
-  async init(film, comments) {
+  init(film, comments) {
+
     this.#film = film;
     this.#comments = comments;
 
-    const commentsForFilm = await this.#comments.getComments(this.#film.id);
+    // const commentsForFilm = await this.#comments.getComments(this.#film.id);
     // console.log(commentsForFilm[0].id);
 
     const prevFilmComponent = this.#filmComponent;
@@ -48,7 +49,7 @@ export default class FilmPresenter {
 
     this.#popupComponent = new PopupView({
       film,
-      comments: [...commentsForFilm],
+      comments: this.#comments,
       onPopupCloseButtonClick: this.#handlePopupCloseButtonClick,
       onAddToWatchClick: this.#handleAddToWatchClick,
       onAlreadyWatchedClick: this.#handleAlreadyWatchedClick,
@@ -135,7 +136,7 @@ export default class FilmPresenter {
       this.#popupComponent.setComments(commentsForFilm);
     }
 
-    this.#bodyElement.appendChild(this.#popupComponent.element);
+    this.#bodyElement.append(this.#popupComponent.element);
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.POPUP;

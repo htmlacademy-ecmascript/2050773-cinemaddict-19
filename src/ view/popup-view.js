@@ -15,13 +15,16 @@ const createGenreTemplate = (film) => {
 
 const createFilmDetailsTemplate = (userDetails) => {
 
+  console.log('sdfgh');
+
+
   const favoriteClassName = userDetails.favorite ? 'film-details__control-button--active' : '';
   const watchlistClassName = userDetails.watchlist ? 'film-details__control-button--active' : '';
   const watchedClassName = userDetails.watched ? 'film-details__control-button--active' : '';
 
   return `<section class="film-details__controls">
   <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlistClassName}" id="watchlist" name="watchlist">Add to watchlist</button>
-  <button type="button" class="film-details__control-button film-details__control-button--watched" ${watchedClassName} id="watched" name="watched">Already watched</button>
+  <button type="button" class="film-details__control-button film-details__control-button--watched ${watchedClassName}" id="watched" name="watched">Already watched</button>
   <button type="button" class="film-details__control-button film-details__control-button--favorite ${favoriteClassName}" id="favorite" name="favorite">Add to favorites</button>
 </section>`;
 };
@@ -34,9 +37,11 @@ function createEmojisTemplate(emotion, isDisabled) {
   </label>`).join('');
 }
 
-function createCommentsTemplate(comments, isDisabled, isDeleting) {
+function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
 
-  return `<ul class="film-details__comments-list">${comments.map((comment) =>
+  console.log('proverka', commentsModel.length);
+
+  return commentsModel.length ? `<ul class="film-details__comments-list">${commentsModel.map((comment) =>
     ` <li class="film-details__comment">
         <span class="film-details__comment-emoji">
           <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-${comment.emotion}">
@@ -49,13 +54,13 @@ function createCommentsTemplate(comments, isDisabled, isDeleting) {
             <button class="film-details__comment-delete" id="${comment.id}" ${isDisabled ? 'disabled' : ''}> ${isDeleting ? 'Deleting...' : 'Delete'}</button>
           </p>
         </div>
-      </li>`).join('')}</ul>`;
+      </li>`).join('')}</ul>` : '';
 }
 
-const createPopupTemplate = (film, comments) => {
-  const { filmInfo, emotion, userDetails, isDisabled, isDeleting } = film;
+const createPopupTemplate = (film, commentsModel) => {
+  const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments } = film;
   const genresTemplate = createGenreTemplate(film);
-  const commentsTemplate = createCommentsTemplate(comments, isDisabled, isDeleting);
+  // const commentsTemplate = createCommentsTemplate(commentsModel, isDisabled, isDeleting);
   const emojisTemplate = createEmojisTemplate(emotion, isDisabled);
   const filmDetailsTemplate = createFilmDetailsTemplate(userDetails);
 
@@ -131,7 +136,7 @@ const createPopupTemplate = (film, comments) => {
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
 
-          ${commentsTemplate}
+          ${createCommentsTemplate(commentsModel, isDisabled, isDeleting)}
 
           <form class="film-details__new-comment" action="" method="get">
             <div class="film-details__add-emoji-label">
