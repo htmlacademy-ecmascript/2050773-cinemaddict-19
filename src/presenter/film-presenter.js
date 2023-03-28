@@ -140,6 +140,8 @@ export default class FilmPresenter {
     document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.POPUP;
+    this.#popupComponent.resetForm();
+
   }
 
   #replacePopupToCard() {

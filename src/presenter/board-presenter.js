@@ -95,20 +95,23 @@ export default class BoardPresenter {
     this.#filmsMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
-
-    switch (actionType) {
-      case UserAction.UPDATE_FILM:
-        this.#filmsModel.updateFilm(updateType, update);
-        break;
-      case UserAction.ADD_COMMENT:
-        this.#filmPresenter.get(update.film.id).setSaving();
-        this.#commentsModel.addComment(updateType, update);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this.#filmPresenter.get(update.film.id).setDeleting();
-        this.#commentsModel.deleteComment(updateType, update);
-        break;
+  #handleViewAction = async (actionType, updateType, update) => {
+    try {
+      switch (actionType) {
+        case UserAction.UPDATE_FILM:
+          await this.#filmsModel.updateFilm(updateType, update);
+          break;
+        case UserAction.ADD_COMMENT:
+          this.#filmPresenter.get(update.film.id).setSaving();
+          await this.#commentsModel.addComment(updateType, update);
+          break;
+        case UserAction.DELETE_COMMENT:
+          this.#filmPresenter.get(update.film.id).setDeleting();
+          await this.#commentsModel.deleteComment(updateType, update);
+          break;
+      }
+    } catch(err) {
+      this.#filmPresenter.get(update.film.id).setAborting(actionType, update.commentId);
     }
   };
 
@@ -117,15 +120,7 @@ export default class BoardPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         commentsForFilm = await this.#commentsModel.getComments(data.id);
-        if (this.#filmPresenter.get(data.id)) {
-          this.#filmPresenter.get(data.id).init(data, commentsForFilm);
-        }
-        if (this.#filmsTopRatedPresenter.get(data.id)){
-          this.#filmsTopRatedPresenter.get(data.id).init(data, commentsForFilm);
-        }
-        if (this.#filmsMostCommentedPresenter.get(data.id)){
-          this.#filmsMostCommentedPresenter.get(data.id).init(data, commentsForFilm);
-        }
+        this.#filmPresenter.get(data.id).init(data, commentsForFilm);
         break;
 
       case UpdateType.MINOR:

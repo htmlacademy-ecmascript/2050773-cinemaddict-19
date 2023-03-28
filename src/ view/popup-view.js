@@ -15,9 +15,6 @@ const createGenreTemplate = (film) => {
 
 const createFilmDetailsTemplate = (userDetails) => {
 
-  console.log('sdfgh');
-
-
   const favoriteClassName = userDetails.favorite ? 'film-details__control-button--active' : '';
   const watchlistClassName = userDetails.watchlist ? 'film-details__control-button--active' : '';
   const watchedClassName = userDetails.watched ? 'film-details__control-button--active' : '';
@@ -38,9 +35,6 @@ function createEmojisTemplate(emotion, isDisabled) {
 }
 
 function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
-
-  console.log('proverka', commentsModel.length);
-
   return commentsModel.length ? `<ul class="film-details__comments-list">${commentsModel.map((comment) =>
     ` <li class="film-details__comment">
         <span class="film-details__comment-emoji">
@@ -60,7 +54,6 @@ function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
 const createPopupTemplate = (film, commentsModel) => {
   const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments } = film;
   const genresTemplate = createGenreTemplate(film);
-  // const commentsTemplate = createCommentsTemplate(commentsModel, isDisabled, isDeleting);
   const emojisTemplate = createEmojisTemplate(emotion, isDisabled);
   const filmDetailsTemplate = createFilmDetailsTemplate(userDetails);
 
@@ -238,6 +231,13 @@ export default class PopupView extends AbstractStatefulView {
       });
     });
   };
+
+  resetForm() {
+    this.updateElement({
+      comment: '',
+      emotion: 'smile',
+    });
+  }
 
 
   #watchlistClickHandler = (evt) => {
