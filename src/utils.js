@@ -1,20 +1,6 @@
 import dayjs from 'dayjs';
 import { FilterType } from './const';
 
-const FILMS_EXTRA_COUNT = 2;
-
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-const getTopRatedFilms = (films) => Array.from(films.values())
-  .sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating)
-  .slice(0, FILMS_EXTRA_COUNT);
-
-const getMostCommentedFilms = (films) => Array.from(films.values())
-  .sort((a, b) => b.comments.length - a.comments.length)
-  .slice(0, FILMS_EXTRA_COUNT);
-
 function getWeightForNullData(dataA, dataB) {
   if (dataA === null && dataB === null) {
     return 0;
@@ -44,8 +30,8 @@ function sortByRating(filmA, filmB) {
 const filter = {
   [FilterType.ALL]: (films) => films,
   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
-  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
-  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.Favorite),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.watched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite),
 };
 
-export {getRandomArrayElement, getTopRatedFilms, getMostCommentedFilms, sortByDate, sortByRating, filter};
+export { sortByDate, sortByRating, filter };

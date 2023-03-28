@@ -19,9 +19,8 @@ export default class CommentsModel extends Observable {
   }
 
   async addComment(updateType, update) {
-    // console.log(update.film.id, update.comment.comment); аргументы верные, но комментарий не добавляется
     try {
-      const newComment = await this.#commentsApiService.addComment(update.film.id, update.comment.comment);
+      const newComment = await this.#commentsApiService.addComment(update.film.id, update.commentToAdd);
       const film = {
         ...update.film,
         comments: newComment.movie.comments,
@@ -33,11 +32,11 @@ export default class CommentsModel extends Observable {
   }
 
   deleteComment(updateType, update) {
-    return this.#commentsApiService.deleteComment(update.commentId)
+    return this.#commentsApiService.deleteComment(updateType, update)
       .then(() => {
         const film = {
           ...update.film,
-          comments: update.film.comments.filter((comment) => comment !== update.commentId),
+          comments: update.film.comments.filter((comment) => comment !== update),
         };
         this._notify(updateType, film);
       });

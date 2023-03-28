@@ -1,21 +1,18 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createBoardTemplate = (filmsAmount) =>
-  ` <section class="footer__statistics">
-      <p> ${ filmsAmount } movies inside</p>
-    </section>`;
+function createStatisticsTemplate(filmsModel) {
+  return `<p>${filmsModel.films.length} movies inside</p>`;
+}
 
-export default class StatisticsView extends AbstractView {
+export default class StatisticView extends AbstractView {
   #filmsModel = null;
-  #filmsAmount = null;
 
   constructor({filmsModel}) {
     super();
     this.#filmsModel = filmsModel;
-    this.#filmsAmount = this.#filmsModel.films.length;
   }
 
   get template() {
-    return createBoardTemplate(this.#filmsAmount);
+    return createStatisticsTemplate(this.#filmsModel);
   }
 }
