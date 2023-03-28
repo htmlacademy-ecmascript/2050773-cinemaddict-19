@@ -181,6 +181,7 @@ export default class BoardPresenter {
 
     const filmPresenter = new FilmPresenter({
       filmListContainer: filmsListContainerElement,
+      filterType: this.#filterType,
       bodyElement: this.#bodyElement,
       onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange
@@ -218,6 +219,8 @@ export default class BoardPresenter {
 
   #renderBoard() {
     render(this.#boardComponent, this.#boardContainer);
+    render(this.#listComponent, this.#boardComponent.element);
+    render(this.#listContainerComponent, this.#listComponent.element);
 
     if (this.#isLoading) {
       this.#renderLoading();
@@ -233,8 +236,6 @@ export default class BoardPresenter {
     }
 
     this.#renderSort();
-    render(this.#listComponent, this.#boardComponent.element);
-    render(this.#listContainerComponent, this.#listComponent.element);
 
     this.#renderFilmCards(films.slice(0, Math.min(filmCount, this.#renderedFilmCount)));
     if(filmCount > this.#renderedFilmCount) {

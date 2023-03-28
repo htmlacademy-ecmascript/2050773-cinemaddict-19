@@ -1,7 +1,7 @@
 import { replace, render, remove } from '../framework/render.js';
 import FilmCardView from '../ view/film-card-view.js';
 import PopupView from '../ view/popup-view.js';
-import {UserAction, UpdateType} from '../const.js';
+import {UserAction, UpdateType, FilterType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -19,10 +19,12 @@ export default class FilmPresenter {
 
   #film = null;
   #comments = null;
+  #filterType = null;
   #mode = Mode.DEFAULT;
 
-  constructor({filmListContainer, bodyElement, onDataChange, onModeChange}) {
+  constructor({filmListContainer, filterType, bodyElement, onDataChange, onModeChange}) {
     this.#filmListContainer = filmListContainer;
+    this.#filterType = filterType;
     this.#bodyElement = bodyElement;
     this.#handleDataChange = onDataChange;
     this.#handleModeChange = onModeChange;
@@ -156,9 +158,16 @@ export default class FilmPresenter {
   };
 
   #handleAlreadyWatchedClick = () => {
+    let updateType;
+    if (this.#filterType === FilterType.ALL || !this.#filterType){
+      updateType = UpdateType.PATCH;
+    } else {
+      updateType = UpdateType.MINOR;
+    }
+
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      updateType,
       {
         ...this.#film,
         userDetails: {
@@ -169,9 +178,16 @@ export default class FilmPresenter {
   };
 
   #handleAddToWatchClick = () => {
+    let updateType;
+    if (this.#filterType === FilterType.ALL || !this.#filterType){
+      updateType = UpdateType.PATCH;
+    } else {
+      updateType = UpdateType.MINOR;
+    }
+
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      updateType,
       {
         ...this.#film,
         userDetails: {
@@ -182,9 +198,16 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
+    let updateType;
+    if (this.#filterType === FilterType.ALL || !this.#filterType){
+      updateType = UpdateType.PATCH;
+    } else {
+      updateType = UpdateType.MINOR;
+    }
+
     this.#handleDataChange(
       UserAction.UPDATE_FILM,
-      UpdateType.PATCH,
+      updateType,
       {
         ...this.#film,
         userDetails: {
