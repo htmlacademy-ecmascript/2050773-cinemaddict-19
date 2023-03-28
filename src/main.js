@@ -41,9 +41,11 @@ const filterPresenter = new FilterPresenter({
   filmsModel
 });
 
-
 boardPresenter.init();
-filterPresenter.init();
-filmsModel.init();
 
-render(new StatisticsView({filmsModel}), footerElement, RenderPosition.BEFOREEND);
+filterPresenter.init();
+
+filmsModel.init()
+  .finally(() => {
+    render(new StatisticsView({filmsModel}), footerElement, RenderPosition.BEFOREEND);
+  });
