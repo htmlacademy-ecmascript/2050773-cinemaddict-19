@@ -26,5 +26,4 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
-
 export { FilterType, SortType, EMOJIS, UserAction, UpdateType };

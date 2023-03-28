@@ -8,7 +8,6 @@ const NoFilmTextType = {
   [FilterType.FAVORITES]: 'There are no favorite movies',
 };
 
-
 const createNoFilmTemplate = (filterType) => {
   const noFilmTextValue = NoFilmTextType[filterType];
 

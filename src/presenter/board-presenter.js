@@ -6,7 +6,7 @@ import NoFilmView from '../ view/no-film-view.js';
 import ShowMoreButtonView from '../ view/show-more-button-view.js';
 import LoadingView from '../ view/loading-view.js';
 import FilmPresenter from './film-presenter.js';
-import { getTopRatedFilms, getMostCommentedFilms, sortByRating, sortByDate, filter } from '../utils.js';
+import { sortByRating, sortByDate, filter } from '../utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { RenderPosition, render, remove } from '../framework/render.js';
 
@@ -26,8 +26,6 @@ export default class BoardPresenter {
   #loadingComponent = new LoadingView();
 
   #filmPresenter = new Map();
-  #filmsTopRatedPresenter = new Map();
-  #filmsMostCommentedPresenter = new Map();
 
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.ALL;
@@ -35,8 +33,6 @@ export default class BoardPresenter {
 
   #listComponent = new FilmsListView();
   #listContainerComponent = new FilmsListContainerView();
-  #listTopRatedContainerComponent = new FilmsListContainerView(true, 'top-rated');
-  #listMostCommentedContainerComponent = new FilmsListContainerView(true, 'most-commented');
 
   #sortComponent = null;
   #noFilmsComponent = null;
@@ -53,8 +49,6 @@ export default class BoardPresenter {
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#commentsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
-
-
   }
 
   get films() {
@@ -91,8 +85,6 @@ export default class BoardPresenter {
 
   #handleModeChange = () => {
     this.#filmPresenter.forEach((presenter) => presenter.resetView());
-    this.#filmsTopRatedPresenter.forEach((presenter) => presenter.resetView());
-    this.#filmsMostCommentedPresenter.forEach((presenter) => presenter.resetView());
   };
 
   #handleViewAction = async (actionType, updateType, update) => {
@@ -199,61 +191,11 @@ export default class BoardPresenter {
     this.#filmPresenter.set(film.id, filmPresenter);
   }
 
-  #renderTopRatedFilms(films) {
-    const filmsExtraComponent = new FilmsListView(true, 'Top rated');
-
-    render(filmsExtraComponent, this.#boardComponent.element);
-    render(this.#listTopRatedContainerComponent, filmsExtraComponent.element);
-
-    const topRatedFilms = getTopRatedFilms(films);
-    const filmsListTopRatedContainerElement = document.querySelector('.top-rated');
-
-    for (const topRatedFilm of topRatedFilms) {
-
-      const filmExtraPresenter = new FilmPresenter({
-        filmListContainer: filmsListTopRatedContainerElement,
-        bodyElement: this.#bodyElement,
-        onDataChange: this.#handleViewAction,
-        onModeChange: this.#handleModeChange
-      });
-
-      filmExtraPresenter.init(topRatedFilm, this.#commentsModel);
-      this.#filmsTopRatedPresenter.set(topRatedFilm.id, filmExtraPresenter);
-    }
-  }
-
-  #renderMostCommentedFilms(films) {
-    const filmsExtraComponent = new FilmsListView(true, 'Most commented');
-
-    render(filmsExtraComponent, this.#boardComponent.element);
-    render(this.#listMostCommentedContainerComponent, filmsExtraComponent.element);
-
-    const mostCommentedFilms = getMostCommentedFilms(films);
-    const filmsListMostCommentedContainerElement = document.querySelector('.most-commented');
-
-    for (const mostCommentedFilm of mostCommentedFilms) {
-
-      const filmExtraPresenter = new FilmPresenter({
-        filmListContainer: filmsListMostCommentedContainerElement,
-        bodyElement: this.#bodyElement,
-        onDataChange: this.#handleViewAction,
-        onModeChange: this.#handleModeChange
-      });
-
-      filmExtraPresenter.init(mostCommentedFilm, this.#commentsModel);
-      this.#filmsMostCommentedPresenter.set(mostCommentedFilm.id, filmExtraPresenter);
-    }
-  }
-
   #clearBoard({resetRenderedFilmCount = false, resetSortType = false} = {}) {
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmsTopRatedPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmsMostCommentedPresenter.forEach((presenter) => presenter.destroy());
 
     this.#filmPresenter.clear();
-    this.#filmsTopRatedPresenter.clear();
-    this.#filmsMostCommentedPresenter.clear();
 
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
@@ -298,8 +240,5 @@ export default class BoardPresenter {
     if(filmCount > this.#renderedFilmCount) {
       this.#renderShowMoreButton();
     }
-
-    // this.#renderTopRatedFilms(this.films, this.comments);
-    // this.#renderMostCommentedFilms(this.films, this.comments);
   }
 }

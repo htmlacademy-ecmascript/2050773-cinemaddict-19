@@ -16,8 +16,6 @@ const bodyElement = document.querySelector('body');
 const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('footer');
 
-// render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
-
 const filmsModel = new FilmsModel({
   filmsApiService: new FilmsApiService(END_POINT, AUTHORIZATION)
 });
@@ -42,9 +40,7 @@ const filterPresenter = new FilterPresenter({
 });
 
 boardPresenter.init();
-
 filterPresenter.init();
-
 filmsModel.init()
   .finally(() => {
     render(new StatisticsView({filmsModel}), footerElement, RenderPosition.BEFOREEND);

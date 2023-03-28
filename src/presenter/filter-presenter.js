@@ -52,10 +52,8 @@ export default class FilterPresenter {
 
   init() {
     const filters = this.filters;
-
     const prevFilterComponent = this.#filterComponent;
     const prevProfileComponent = this.#profileComponent;
-
     const watchedFilms = filters.find((film) => film.type === FilterType.HISTORY).count;
 
     this.#profileComponent = new ProfileView({watchedFilms});

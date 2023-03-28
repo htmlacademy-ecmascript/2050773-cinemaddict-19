@@ -10,7 +10,7 @@ dayjs.extend(relativeTime);
 
 const createGenreTemplate = (film) => {
   const { filmInfo } = film;
-  return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(',')}`;
+  return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('')}`;
 };
 
 const createFilmDetailsTemplate = (userDetails) => {
@@ -183,6 +183,7 @@ export default class PopupView extends AbstractStatefulView {
     this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
     this.element.querySelectorAll('.film-details__comment-delete').forEach((deleteButton) => deleteButton.addEventListener('click', this.#commentDeleteClickHandler));
+    this.element.addEventListener('scroll', this.#scrollPositionHandler);
   }
 
   get template() {
@@ -209,6 +210,18 @@ export default class PopupView extends AbstractStatefulView {
   setComments(commentsForFilm) {
     this.#comments = commentsForFilm;
   }
+
+  getScrollPosition() {
+    return this._state.scrollPosition;
+  }
+
+  setScrollPosition(scrollPosition) {
+    this.element.scrollTo(0, scrollPosition);
+  }
+
+  #scrollPositionHandler = () => {
+    this._setState({scrollPosition: this.element.scrollTop});
+  };
 
   shakeControls = () => this.shake.call({element: this.element.querySelector('.film-details__controls')});
 
@@ -239,7 +252,6 @@ export default class PopupView extends AbstractStatefulView {
     });
   }
 
-
   #watchlistClickHandler = (evt) => {
     const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
@@ -262,12 +274,12 @@ export default class PopupView extends AbstractStatefulView {
   };
 
   #emojiChangeHandler = (evt) => {
-    const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
     this.updateElement({
       emotion: evt.target.value,
+      scrollPosition: this.element.scrollTop,
     });
-    this.element.scroll(0, currentScrollPosition);
+    this.element.scrollTo(0, this._state.scrollPosition);
   };
 
   #commentInputHandler = (evt) => {
@@ -278,7 +290,11 @@ export default class PopupView extends AbstractStatefulView {
 
   #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
+    this.updateElement({
+      scrollPosition: this.element.scrollTop
+    });
     this.#handleDeleteClick(evt.target.id);
+    this.element.scrollTo(0, this._state.scrollPosition);
   };
 
   #addCommentKeydownHandler = (evt) => {
@@ -287,7 +303,11 @@ export default class PopupView extends AbstractStatefulView {
         comment: this._state.comment,
         emotion: this._state.emotion
       };
+      this.updateElement({
+        scrollPosition: this.element.scrollTop
+      });
       this.#handleAddCommentSubmit(commentToAdd);
+      this.element.scrollTo(0, this._state.scrollPosition);
     }
   };
 

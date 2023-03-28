@@ -17,8 +17,6 @@ function getProfileName (watchedFilms) {
   }
 }
 
-// const getProfileName = (watchedFilms) => (watchedFilms) <= 10 ? userStatus.NOVICE : (watchedFilms <= 20) ? userStatus.FAN : userStatus.MOVIE_BUFF;
-
 const createProfileTemplate = (watchedFilms) =>
   `<section class="header__profile profile">
     <p class="profile__rating">${getProfileName(watchedFilms)}</p>

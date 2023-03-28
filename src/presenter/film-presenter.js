@@ -33,9 +33,6 @@ export default class FilmPresenter {
     this.#film = film;
     this.#comments = comments;
 
-    // const commentsForFilm = await this.#comments.getComments(this.#film.id);
-    // console.log(commentsForFilm[0].id);
-
     const prevFilmComponent = this.#filmComponent;
     const prevPopupComponent = this.#popupComponent;
 
@@ -69,6 +66,11 @@ export default class FilmPresenter {
 
     if (this.#mode === Mode.POPUP) {
       replace(this.#popupComponent, prevPopupComponent);
+      replace(this.#filmComponent, prevFilmComponent);
+
+      const scrollPosition = prevPopupComponent.getScrollPosition();
+
+      this.#popupComponent.setScrollPosition(scrollPosition);
       return;
     }
 
@@ -100,7 +102,6 @@ export default class FilmPresenter {
       isDeleting: true,
     });
   }
-
 
   setAborting(actionType, commentId) {
     if (this.#mode === Mode.DEFAULT) {
