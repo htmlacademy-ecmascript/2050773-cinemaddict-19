@@ -1,6 +1,5 @@
 import BoardPresenter from './presenter/board-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import ProfileView from './ view/profile-view.js';
 import StatisticsView from './ view/statistics-view.js';
 import FilmsModel from './model/films-model.js';
 import CommentsModel from './model/comments-model.js';
@@ -17,7 +16,7 @@ const bodyElement = document.querySelector('body');
 const headerElement = document.querySelector('.header');
 const footerElement = document.querySelector('footer');
 
-render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
+// render(new ProfileView(), headerElement, RenderPosition.BEFOREEND);
 
 const filmsModel = new FilmsModel({
   filmsApiService: new FilmsApiService(END_POINT, AUTHORIZATION)
@@ -37,6 +36,7 @@ const boardPresenter = new BoardPresenter({
 
 const filterPresenter = new FilterPresenter({
   filterContainer: mainElement,
+  profileContainer: headerElement,
   filterModel,
   filmsModel
 });
