@@ -255,6 +255,11 @@ export default class PopupView extends AbstractStatefulView {
   #watchlistClickHandler = (evt) => {
     const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
+
+    if (!evt.target.classList.contains('film-details__control-button')) {
+      return;
+    }
+
     this.#handleAddToWatchClick();
     this.element.scroll(0, currentScrollPosition);
   };
@@ -262,6 +267,11 @@ export default class PopupView extends AbstractStatefulView {
   #watchedClickHandler = (evt) => {
     const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
+
+    if (!evt.target.classList.contains('film-details__control-button')) {
+      return;
+    }
+
     this.#handleAlreadyWatchedClick();
     this.element.scroll(0, currentScrollPosition);
   };
@@ -269,6 +279,11 @@ export default class PopupView extends AbstractStatefulView {
   #favoriteClickHandler = (evt) => {
     const currentScrollPosition = this.element.scrollTop;
     evt.preventDefault();
+
+    if (!evt.target.classList.contains('film-details__control-button')) {
+      return;
+    }
+
     this.#handleFavoriteClick();
     this.element.scroll(0, currentScrollPosition);
   };
