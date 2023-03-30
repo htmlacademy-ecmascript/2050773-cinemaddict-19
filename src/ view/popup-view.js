@@ -8,7 +8,7 @@ import { EMOJIS } from '../const.js';
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
-const createOneCommentTemplate = (comment) => `<textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"> ${comment ? comment : 'Select reaction below and write comment here'}</textarea>`;
+const createOneCommentTemplate = (isDisabled, comment) => `<textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isDisabled ? 'disabled' : ''}>${comment ? comment : ''}</textarea>`;
 
 
 const createGenreTemplate = (film) => {
@@ -141,8 +141,7 @@ const createPopupTemplate = (film, commentsModel) => {
 
             </div>
 
-              <label class="film-details__comment-label"> ${createOneCommentTemplate(comment)}
-              </label>
+              <label class="film-details__comment-label">${createOneCommentTemplate(isDisabled, comment)}</label>
               <div class="film-details__emoji-list">
 
               ${emojisTemplate}
