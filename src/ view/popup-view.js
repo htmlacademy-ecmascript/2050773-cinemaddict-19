@@ -52,7 +52,7 @@ function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
 }
 
 const createPopupTemplate = (film, commentsModel) => {
-  const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments } = film;
+  const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments, comment } = film;
   const genresTemplate = createGenreTemplate(film);
   const emojisTemplate = createEmojisTemplate(emotion, isDisabled);
   const filmDetailsTemplate = createFilmDetailsTemplate(userDetails);
@@ -139,7 +139,7 @@ const createPopupTemplate = (film, commentsModel) => {
             </div>
 
               <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"> ${comment}</textarea>
               </label>
               <div class="film-details__emoji-list">
 
