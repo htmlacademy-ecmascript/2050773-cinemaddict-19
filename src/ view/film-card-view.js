@@ -1,6 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import dayjs from 'dayjs';
 
+const createDescriptionTemplate = (description) => description.length > 140 ? `${description.slice(0, 140)}...` : description;
+
 const createFilmCardTemplate = (film) => {
   const {comments, filmInfo,userDetails} = film;
 
@@ -18,7 +20,7 @@ const createFilmCardTemplate = (film) => {
         <span class="film-card__genre">${filmInfo.genre[0]}</span>
       </p>
       <img src="${filmInfo.poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${filmInfo.description}</p>
+      <p class="film-card__description">${createDescriptionTemplate(filmInfo.description)}</p>
       <span class="film-card__comments">${comments.length} comments</span>
     </a>
     <div class="film-card__controls">
