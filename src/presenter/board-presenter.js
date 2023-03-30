@@ -53,7 +53,7 @@ export default class BoardPresenter {
 
   get films() {
     this.#filterType = this.#filterModel.filter;
-    const films = this.#filmsModel.films;
+    const films = [...this.#filmsModel.films];
     const filteredFilms = filter[this.#filterType](films);
 
     switch (this.#currentSortType) {
