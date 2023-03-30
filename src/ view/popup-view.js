@@ -44,7 +44,7 @@ function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
           <p class="film-details__comment-text">${comment.comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
-            <span class="film-details__comment-day">${dayjs(comment.date).format}</span>
+            <span class="film-details__comment-day">${dayjs(comment.date).fromNow()}</span>
             <button class="film-details__comment-delete" id="${comment.id}" ${isDisabled ? 'disabled' : ''}> ${isDeleting ? 'Deleting...' : 'Delete'}</button>
           </p>
         </div>
