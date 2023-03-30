@@ -6,16 +6,15 @@ const UserStatus = {
   MOVIE_BUFF: 'Movie Buff'
 };
 
-function getProfileName (watchedFilms) {
+const getProfileName = (watchedFilms) => {
   if (watchedFilms <= 10) {
     return UserStatus.NOVICE;
   }
-  else if (watchedFilms <= 20) {
+  if (watchedFilms <= 20) {
     return UserStatus.FAN;
-  } else {
-    return UserStatus.MOVIE_BUFF;
   }
-}
+  return UserStatus.MOVIE_BUFF;
+};
 
 const createProfileTemplate = (watchedFilms) =>
   `<section class="header__profile profile">
