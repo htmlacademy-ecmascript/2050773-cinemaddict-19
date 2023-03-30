@@ -61,6 +61,8 @@ export default class BoardPresenter {
         return filteredFilms.sort(sortByDate);
       case SortType.RATING:
         return filteredFilms.sort(sortByRating);
+      case SortType.DEFAULT:
+        return filteredFilms;
     }
 
     return filteredFilms;
