@@ -32,11 +32,11 @@ export default class CommentsModel extends Observable {
   }
 
   deleteComment(updateType, update) {
-    return this.#commentsApiService.deleteComment(updateType, update)
+    return this.#commentsApiService.deleteComment(update.commentId)
       .then(() => {
         const film = {
           ...update.film,
-          comments: update.film.comments.filter((comment) => comment !== update),
+          comments: update.film.comments.filter((comment) => comment !== update.commentId),
         };
         this._notify(updateType, film);
       });

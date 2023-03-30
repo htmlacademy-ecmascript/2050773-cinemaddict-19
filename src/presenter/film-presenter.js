@@ -1,7 +1,7 @@
 import { replace, render, remove } from '../framework/render.js';
 import FilmCardView from '../ view/film-card-view.js';
 import PopupView from '../ view/popup-view.js';
-import {UserAction, UpdateType, FilterType} from '../const.js';
+import {UserAction, UpdateType} from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -159,7 +159,8 @@ export default class FilmPresenter {
 
   #handleAlreadyWatchedClick = () => {
     let updateType;
-    if (this.#filterType === FilterType.ALL || !this.#filterType){
+    const popupClass = document.querySelector('.film-details');
+    if (popupClass){
       updateType = UpdateType.PATCH;
     } else {
       updateType = UpdateType.MINOR;
@@ -179,7 +180,8 @@ export default class FilmPresenter {
 
   #handleAddToWatchClick = () => {
     let updateType;
-    if (this.#filterType === FilterType.ALL || !this.#filterType){
+    const popupClass = document.querySelector('.film-details');
+    if (popupClass){
       updateType = UpdateType.PATCH;
     } else {
       updateType = UpdateType.MINOR;
@@ -199,7 +201,8 @@ export default class FilmPresenter {
 
   #handleFavoriteClick = () => {
     let updateType;
-    if (this.#filterType === FilterType.ALL || !this.#filterType){
+    const popupClass = document.querySelector('.film-details');
+    if (popupClass){
       updateType = UpdateType.PATCH;
     } else {
       updateType = UpdateType.MINOR;

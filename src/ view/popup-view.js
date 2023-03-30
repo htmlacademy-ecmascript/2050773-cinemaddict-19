@@ -8,6 +8,9 @@ import { EMOJIS } from '../const.js';
 dayjs.extend(duration);
 dayjs.extend(relativeTime);
 
+const createOneCommentTemplate = (isDisabled, comment) => `<textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment" ${isDisabled ? 'disabled' : ''}>${comment ? comment : ''}</textarea>`;
+
+
 const createGenreTemplate = (film) => {
   const { filmInfo } = film;
   return `<div class="event__available-offers">${filmInfo.genre.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('')}`;
@@ -52,7 +55,7 @@ function createCommentsTemplate(commentsModel, isDisabled, isDeleting) {
 }
 
 const createPopupTemplate = (film, commentsModel) => {
-  const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments } = film;
+  const { filmInfo, emotion, userDetails, isDisabled, isDeleting, comments, comment } = film;
   const genresTemplate = createGenreTemplate(film);
   const emojisTemplate = createEmojisTemplate(emotion, isDisabled);
   const filmDetailsTemplate = createFilmDetailsTemplate(userDetails);
@@ -138,9 +141,7 @@ const createPopupTemplate = (film, commentsModel) => {
 
             </div>
 
-              <label class="film-details__comment-label">
-                <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
-              </label>
+              <label class="film-details__comment-label">${createOneCommentTemplate(isDisabled, comment)}</label>
               <div class="film-details__emoji-list">
 
               ${emojisTemplate}
