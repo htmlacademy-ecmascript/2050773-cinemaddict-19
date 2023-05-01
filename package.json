@@ -1,5 +1,6 @@
 {
   "name": "cinemaddict",
+  "homepage": "https://nastya12oz.github.io/cinemaaddict",
   "version": "19.0.0",
   "private": true,
   "description": "Проект «Киноман» от HTML Academy",
@@ -13,7 +14,9 @@
   "scripts": {
     "lint": "eslint src/",
     "build": "webpack --mode production",
-    "start": "webpack serve --mode development --open"
+    "start": "webpack serve --mode development --open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",
@@ -23,6 +26,7 @@
     "css-loader": "6.7.3",
     "eslint": "8.28.0",
     "eslint-config-htmlacademy": "8.0.0",
+    "gh-pages": "^5.0.0",
     "nanoid": "4.0.1",
     "style-loader": "3.3.1",
     "webpack": "5.75.0",
